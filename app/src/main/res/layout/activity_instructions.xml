@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/instructions_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Instructions"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/step_one_text"
+        android:layout_width="224dp"
+        android:layout_height="19dp"
+        android:layout_marginTop="16dp"
+        android:text="Step 1. Assign a value to every card"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/instructions_text" />
+
+    <TextView
+        android:id="@+id/step_two_text"
+        android:layout_width="224dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="16dp"
+        android:text="Step 2. Keep a “Running Count” based off of the values of the card dealt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/step_one_text" />
+
+    <TextView
+        android:id="@+id/step_three_text"
+        android:layout_width="224dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="16dp"
+        android:text="Step 3. Use this information to calculate the count per deck or “true count”"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/step_two_text" />
+
+    <TextView
+        android:id="@+id/step_four_text"
+        android:layout_width="224dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="16dp"
+        android:text="Step 4. Change your bets as the true count rises"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/step_three_text" />
+
+    <TextView
+        android:id="@+id/value_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Card Values"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/step_four_text" />
+
+    <TextView
+        android:id="@+id/plus_one_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="2 - 6 = +1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/value_text" />
+
+    <TextView
+        android:id="@+id/zero_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="7 - 9 = 0"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/plus_one_text" />
+
+    <TextView
+        android:id="@+id/minus_one_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="10 - Ace = -1"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/zero_text" />
+
+    <TextView
+        android:id="@+id/example_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Example"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/minus_one_text" />
+
+    <TextView
+        android:id="@+id/example_one_text"
+        android:layout_width="224dp"
+        android:layout_height="58dp"
+        android:layout_marginTop="16dp"
+        android:text="My hand is a King, a 5, and a 6. King is -1, 5 and 6 are +1 each, so the count is +1."
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/example_text" />
+
+    <TextView
+        android:id="@+id/example_two_text"
+        android:layout_width="224dp"
+        android:layout_height="58dp"
+        android:layout_marginTop="16dp"
+        android:text="My hand is a 2, a 7, and a 10. 2 is +1, 7 is 0, and 10 is -1, so the count is 0."
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/example_one_text" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
