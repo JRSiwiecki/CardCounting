@@ -19,23 +19,24 @@
 		app:layout_constraintTop_toTopOf="parent" />
 
 	<Button
-		android:id="@+id/practice_mode_button"
+		android:id="@+id/start_game_button"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_marginTop="128dp"
-		android:text="Practice Mode"
+		android:layout_marginTop="124dp"
+		android:text="Start Game"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@+id/textView" />
 
 	<Button
-		android:id="@+id/hard_mode_button"
+		android:id="@+id/instructions_button"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_marginTop="32dp"
-		android:text="Hard Mode"
+		android:layout_marginTop="36dp"
+		android:text="Instructions"
 		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintHorizontal_bias="0.498"
 		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@+id/practice_mode_button" />
+		app:layout_constraintTop_toBottomOf="@+id/start_game_button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -15,12 +15,12 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.practiceModeButton.setOnClickListener {
-            Log.d(TAG, "practice mode")
+        binding.startGameButton.setOnClickListener {
+            Log.d(TAG, "start game")
         }
 
-        binding.hardModeButton.setOnClickListener {
-            Log.d(TAG, "hard mode")
+        binding.instructionsButton.setOnClickListener {
+            Log.d(TAG, "instructions")
         }
     }
 }
