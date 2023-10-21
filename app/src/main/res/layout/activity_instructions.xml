@@ -9,7 +9,7 @@
         android:id="@+id/instructions_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:text="Instructions"
         android:textSize="48sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -18,7 +18,7 @@
 
     <TextView
         android:id="@+id/step_one_text"
-        android:layout_width="225dp"
+        android:layout_width="224dp"
         android:layout_height="19dp"
         android:layout_marginTop="16dp"
         android:text="Step 1. Assign a value to every card"
@@ -38,8 +38,8 @@
 
     <TextView
         android:id="@+id/step_three_text"
-        android:layout_width="220dp"
-        android:layout_height="58dp"
+        android:layout_width="224dp"
+        android:layout_height="50dp"
         android:layout_marginTop="16dp"
         android:text="Step 3. Use this information to calculate the count per deck or “true count”"
         app:layout_constraintEnd_toEndOf="parent"
@@ -48,7 +48,7 @@
 
     <TextView
         android:id="@+id/step_four_text"
-        android:layout_width="220dp"
+        android:layout_width="224dp"
         android:layout_height="36dp"
         android:layout_marginTop="16dp"
         android:text="Step 4. Change your bets as the true count rises"
@@ -60,7 +60,7 @@
         android:id="@+id/value_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:text="Card Values"
         android:textSize="32sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -93,6 +93,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="10 - Ace = -1"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/zero_text" />
@@ -101,7 +102,7 @@
         android:id="@+id/example_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:text="Example"
         android:textSize="32sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -110,20 +111,22 @@
 
     <TextView
         android:id="@+id/example_one_text"
-        android:layout_width="259dp"
-        android:layout_height="36dp"
+        android:layout_width="224dp"
+        android:layout_height="58dp"
         android:layout_marginTop="16dp"
         android:text="My hand is a King, a 5, and a 6. King is -1, 5 and 6 are +1 each, so the count is +1."
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/example_text" />
 
     <TextView
         android:id="@+id/example_two_text"
-        android:layout_width="256dp"
-        android:layout_height="37dp"
+        android:layout_width="224dp"
+        android:layout_height="58dp"
         android:layout_marginTop="16dp"
         android:text="My hand is a 2, a 7, and a 10. 2 is +1, 7 is 0, and 10 is -1, so the count is 0."
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/example_one_text" />

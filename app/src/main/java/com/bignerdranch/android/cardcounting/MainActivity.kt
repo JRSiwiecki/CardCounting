@@ -1,5 +1,6 @@
 package com.bignerdranch.android.cardcounting
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -21,6 +22,8 @@ class MainActivity : AppCompatActivity() {
 
         binding.instructionsButton.setOnClickListener {
             Log.d(TAG, "instructions")
+            val intent = Intent(this, InstructionsActivity::class.java)
+            startActivity(intent)
         }
     }
 }
