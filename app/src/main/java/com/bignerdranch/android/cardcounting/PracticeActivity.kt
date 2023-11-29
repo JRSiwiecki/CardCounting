@@ -71,7 +71,12 @@ class PracticeActivity: AppCompatActivity() {
         val nextCard = getCardFromDeck()
 
         // Update custom view
-        activeCard.setSymbols(nextCard.rank.symbol, nextCard.suit.symbol.toString(), nextCard.rank.symbol, nextCard.suit.symbol.toString())
+        activeCard.setSymbols(
+            nextCard.rank.symbol,
+            nextCard.suit.symbol.toString(),
+            nextCard.rank.symbol,
+            nextCard.suit.symbol.toString()
+        )
     }
     private fun getCardFromDeck(): Card {
         // Get card and return or return placeholder card
