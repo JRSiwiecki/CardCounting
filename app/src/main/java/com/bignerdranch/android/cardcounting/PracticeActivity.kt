@@ -7,13 +7,19 @@ import com.bignerdranch.android.cardcounting.databinding.ActivityPracticeBinding
 
 class PracticeActivity: AppCompatActivity() {
     private lateinit var binding: ActivityPracticeBinding
+    private lateinit var deck: Deck
     private var count: Int = 0
     private lateinit var countdownTimer: CountDownTimer
+    private lateinit var activeCard: CardView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPracticeBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        deck = Deck.Builder().build()
+
+        activeCard = findViewById(R.id.activecard)
 
         startCountdown(5000)
 
@@ -38,6 +44,7 @@ class PracticeActivity: AppCompatActivity() {
         }
 
         countdownTimer.start()
+        updateActiveCard()
     }
 
     private fun next(delta: Int) {
@@ -50,6 +57,8 @@ class PracticeActivity: AppCompatActivity() {
 
         startCountdown(5000)
 
+        updateActiveCard()
+
         //Can add card logic/switches here
     }
 
@@ -57,4 +66,15 @@ class PracticeActivity: AppCompatActivity() {
         binding.count.text = "Count: $count"
     }
 
+    private fun updateActiveCard() {
+        // Get next card from deck
+        val nextCard = getCardFromDeck()
+
+        // Update custom view
+        activeCard.setSymbols(nextCard.rank.symbol, nextCard.suit.symbol.toString(), nextCard.rank.symbol, nextCard.suit.symbol.toString())
+    }
+    private fun getCardFromDeck(): Card {
+        // Get card and return or return placeholder card
+        return deck.dealCard() ?: Card(Suit.SPADES, Rank.TWO)
+    }
 }

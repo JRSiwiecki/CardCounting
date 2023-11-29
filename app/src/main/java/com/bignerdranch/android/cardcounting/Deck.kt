@@ -35,6 +35,9 @@ class Deck private constructor() {
     private fun addCard(card: Card) = cards.add(card)
 
     private fun loadDeck() {
+        // Clear existing cards
+        cards.clear()
+
         val suits = ArrayList<Suit>()
 
         for (suit in Suit.values())
@@ -57,6 +60,9 @@ class Deck private constructor() {
     fun dealCard() : Card? {
         if (cards.size == 0) {
             loadDeck()
+
+            // shuffle deck after loading,
+            shuffleDeck()
         }
 
         return cards.removeFirstOrNull()

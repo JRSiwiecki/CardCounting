@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
+    <com.bignerdranch.android.cardcounting.CardView
         android:id="@+id/activecard"
         android:layout_width="0dp"
         android:layout_height="384dp"
@@ -15,8 +15,33 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/timer"
-        app:srcCompat="@drawable/card" />
+        app:layout_constraintTop_toBottomOf="@+id/timer"/>
+
+    <TextView
+        android:id="@+id/rankSymbol"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="80dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:gravity="start|top"
+        android:layout_marginEnd="8dp"
+        android:textSize="18sp"
+        android:textColor="#000000" />
+
+    <TextView
+        android:id="@+id/suitSymbol"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="64dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:gravity="end|bottom"
+        android:layout_marginStart="8dp"
+        android:textSize="18sp"
+        android:textColor="#FF0000" />
 
     <Button
         android:id="@+id/minuscount"
