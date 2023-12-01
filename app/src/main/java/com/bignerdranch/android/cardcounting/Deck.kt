@@ -1,7 +1,7 @@
 package com.bignerdranch.android.cardcounting
 
 /* Code modified from KdeL's KCards */
-class Deck private constructor() {
+class Deck private constructor(): CardHolder() {
     private val cards = ArrayDeque<Card>()
 
     /**
@@ -32,7 +32,7 @@ class Deck private constructor() {
         }
     }
 
-    private fun addCard(card: Card) = cards.add(card)
+
 
     private fun loadDeck() {
         // Clear existing cards
@@ -54,8 +54,7 @@ class Deck private constructor() {
     }
 
     /**
-     * Currently only deals one card at a time
-     * Do we want to eventually deal more than one card at a time?
+     * Deals one card at a time
      */
     fun dealCard() : Card? {
         if (cards.size == 0) {
