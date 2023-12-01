@@ -2,10 +2,12 @@ package com.bignerdranch.android.cardcounting
 
 import android.os.Bundle
 import android.os.CountDownTimer
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.bignerdranch.android.cardcounting.databinding.ActivityPracticeBinding
 
 class PracticeActivity: AppCompatActivity() {
+    val viewModel: PracticeViewModel by viewModels()
     private lateinit var binding: ActivityPracticeBinding
     private lateinit var deck: Deck
     private var count: Int = 0
