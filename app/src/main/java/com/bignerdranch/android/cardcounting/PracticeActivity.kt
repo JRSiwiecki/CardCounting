@@ -7,11 +7,10 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bignerdranch.android.cardcounting.databinding.ActivityPracticeBinding
 
 class PracticeActivity: AppCompatActivity() {
-    val viewModel: PracticeViewModel by viewModels()
     private lateinit var binding: ActivityPracticeBinding
     private lateinit var deck: Deck
     private var count: Int = 0
-    private lateinit var countdownTimer: CountDownTimer
+    private lateinit var countdownTimer: CountDownTimerViewModel
     private lateinit var activeCard: CardView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,19 +32,24 @@ class PracticeActivity: AppCompatActivity() {
     }
 
     private fun startCountdown(duration: Long) {
-        countdownTimer = object : CountDownTimer(duration, 1000) {
-            override fun onTick(millisUntilFinished: Long) {
-                val secondsRemaining = 1 + millisUntilFinished / 1000
-                binding.timer.text = secondsRemaining.toString()
-            }
-
-            override fun onFinish() {
-                binding.timer.text = "Countdown Finished!"
-                //Failed to put count in time/automatically move to next card
-            }
-        }
+        countdownTimer = CountDownTimerViewModel().Builder().build(5000)
 
         countdownTimer.start()
+
+        /**
+         * countdownTimer = object : CountDownTimer(duration, 1000) {
+         *             override fun onTick(millisUntilFinished: Long) {
+         *                 val secondsRemaining = 1 + millisUntilFinished / 1000
+         *                 binding.timer.text = secondsRemaining.toString()
+         *             }
+         *
+         *             override fun onFinish() {
+         *                 binding.timer.text = "Countdown Finished!"
+         *                 //Failed to put count in time/automatically move to next card
+         *             }
+         *         }
+         */
+        
         updateActiveCard()
     }
 

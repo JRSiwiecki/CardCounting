@@ -12,7 +12,8 @@ class PracticeViewModel(private val savedStateHandle: SavedStateHandle) : ViewMo
 
     private lateinit var countdownTimer: CountDownTimer
 
-    fun getScore() {
-
-    }
+    /**
+     * Things to implement:
+     *
+     */
 }
