@@ -24,6 +24,8 @@
         <activity android:name=".PracticeActivity">
         </activity>
 
+        <activity android:name=".PlayActivity">
+        </activity>
     </application>
 
 </manifest>
