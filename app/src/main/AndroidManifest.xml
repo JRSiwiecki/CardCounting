@@ -24,6 +24,11 @@
         <activity android:name=".PracticeActivity">
         </activity>
 
+        <activity android:name=".PlayActivity">
+        </activity>
+
+        <activity android:name=".PlayScreenActivity">
+        </activity>
     </application>
 
 </manifest>

@@ -27,5 +27,11 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, InstructionsActivity::class.java)
             startActivity(intent)
         }
+
+        binding.startBlackjackButton.setOnClickListener {
+            Log.d(TAG, "blackjack")
+            val intent = Intent(this, PlayActivity::class.java)
+            startActivity(intent)
+        }
     }
 }
