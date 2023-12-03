@@ -2,8 +2,6 @@ package com.bignerdranch.android.cardcounting
 
 /* Code modified from KdeL's KCards */
 class Deck private constructor(): CardHolder() {
-    private val cards = ArrayDeque<Card>()
-
     /**
      * Deck Builder. Do we need this private constructor?
      */

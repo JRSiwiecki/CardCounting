@@ -10,7 +10,7 @@ abstract class CardHolder {
      * Members [addCard], [removeCard], [moveCard] and [moveAllCards] are used to add/remove [Card]s on this list.
      * Use [shuffle] to re-arrange the [Card]s into a random order.
      */
-    private val cards = ArrayList<Card>()
+    protected val cards = ArrayList<Card>()
 
     /**
      * adds the [card] to the [cards] pile. Returns the CardHolder .

@@ -23,6 +23,8 @@ class PracticeActivity: AppCompatActivity() {
 
         activeCard = findViewById(R.id.activecard)
 
+        updateActiveCard()
+
         startCountdown(5000)
 
         updateCountText()
@@ -56,7 +58,8 @@ class PracticeActivity: AppCompatActivity() {
          *         }
          */
 
-        updateActiveCard()
+        // FIXME: Should probably be uncommented when countdownTimer is fixed...
+        // updateActiveCard()
     }
 
     private fun next(delta: Int) {
@@ -79,6 +82,7 @@ class PracticeActivity: AppCompatActivity() {
     }
 
     private fun updateActiveCard() {
+
         // Get next card from deck
         val nextCard = getCardFromDeck()
 
