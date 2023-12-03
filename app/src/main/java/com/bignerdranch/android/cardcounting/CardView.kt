@@ -12,6 +12,7 @@ class CardView : ConstraintLayout {
     private lateinit var suitSymbolTop: TextView
     private lateinit var rankSymbolBottom: TextView
     private lateinit var suitSymbolBottom: TextView
+    private lateinit var rankSymbolMiddle: TextView
 
     constructor(context: Context) : super(context) {
         initializeViews(context)
@@ -29,6 +30,7 @@ class CardView : ConstraintLayout {
         LayoutInflater.from(context).inflate(R.layout.card_view, this)
         rankSymbolTop = findViewById(R.id.rankSymbolTop)
         suitSymbolTop = findViewById(R.id.suitSymbolTop)
+        rankSymbolMiddle = findViewById(R.id.rankSymbolMiddle)
         rankSymbolBottom = findViewById(R.id.rankSymbolBottom)
         suitSymbolBottom = findViewById(R.id.suitSymbolBottom)
     }
@@ -36,6 +38,7 @@ class CardView : ConstraintLayout {
     fun setSymbols(rankTop: String, suitTop: String, rankBottom: String, suitBottom: String) {
         rankSymbolTop.text = rankTop
         suitSymbolTop.text = suitTop
+        rankSymbolMiddle.text = rankTop
         rankSymbolBottom.text = rankBottom
         suitSymbolBottom.text = suitBottom
     }

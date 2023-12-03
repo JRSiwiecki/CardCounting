@@ -37,6 +37,11 @@ class PracticeActivity: AppCompatActivity() {
 
         countdownTimer.start()
 
+        fun onTick(millisUntilFinished: Long) {
+            val secondsRemaining = 1 + millisUntilFinished / 1000
+            binding.timer.text = secondsRemaining.toString()
+        }
+
         /**
          * countdownTimer = object : CountDownTimer(duration, 1000) {
          *             override fun onTick(millisUntilFinished: Long) {
