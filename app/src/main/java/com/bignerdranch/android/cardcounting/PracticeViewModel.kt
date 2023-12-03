@@ -16,4 +16,5 @@ class PracticeViewModel(private val savedStateHandle: SavedStateHandle) : ViewMo
      * Things to implement:
      *
      */
+    
 }

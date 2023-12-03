@@ -12,6 +12,7 @@ class PracticeActivity: AppCompatActivity() {
     private var count: Int = 0
     private lateinit var countdownTimer: CountDownTimerViewModel
     private lateinit var activeCard: CardView
+    private val cardTimerDuration: Long = 5000
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +33,7 @@ class PracticeActivity: AppCompatActivity() {
     }
 
     private fun startCountdown(duration: Long) {
-        countdownTimer = CountDownTimerViewModel().Builder().build(5000)
+        countdownTimer = CountDownTimerViewModel().Builder().build(cardTimerDuration)
 
         countdownTimer.start()
 
@@ -49,7 +50,7 @@ class PracticeActivity: AppCompatActivity() {
          *             }
          *         }
          */
-        
+
         updateActiveCard()
     }
 
