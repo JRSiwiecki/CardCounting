@@ -1,5 +1,6 @@
 package com.bignerdranch.android.cardcounting
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -10,7 +11,7 @@ import com.bignerdranch.android.cardcounting.databinding.ActivityBettingBinding
 class PlayActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityBettingBinding
-    private var money: Float = 50.50f
+    private var money: Float = 0f
     private lateinit var activeButton: Button
     private lateinit var moneyTextView: TextView
 
@@ -28,7 +29,7 @@ class PlayActivity : AppCompatActivity() {
         binding = ActivityBettingBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
+        money = intent.getFloatExtra("money", 50.50f)
 
         // Assuming you have a TextView with id "moneyTextView" in your layout
         moneyTextView = binding.money
@@ -93,9 +94,15 @@ class PlayActivity : AppCompatActivity() {
 
     private fun updateActiveButtonValue(betAmount: Int) {
         val newMoney = activeButton.text.toString().toFloat() + betAmount
-        if ((betAmount > 0 && newMoney <= money) || (betAmount < 0 && newMoney >= 0)) {
+        if ((betAmount > 0 && betAmount <= money) || (betAmount < 0 && newMoney >= 0)) {
 
             setButtonTextValue(activeButton, newMoney)
+
+            val index = betButtonMap[activeButton.id] ?: 0
+            betAmounts[index] = newMoney
+
+            money -= betAmount
+            displayCurrentMoney()
         }
     }
 
@@ -117,6 +124,31 @@ class PlayActivity : AppCompatActivity() {
 
 
     private fun startGame() {
-        // Your start game logic here
+
+        val finalBets = betAmounts.toMutableList()
+        val iterator = finalBets.iterator()
+
+        while (iterator.hasNext()) {
+            val bet = iterator.next()
+            if (bet <= 0) {
+                iterator.remove()
+            }
+        }
+
+        if (finalBets.isEmpty()) {
+            // No bets placed
+            return
+        }
+
+        // Create an Intent to start the ActivityPlayScreen
+        val intent = Intent(this, PlayScreenActivity::class.java)
+
+        // Pass the necessary data to the next activity
+        intent.putExtra("money", money)
+        intent.putExtra("betAmounts", finalBets.toFloatArray()) // Convert the list to a float array
+
+        // Start the next activity
+        startActivity(intent)
     }
+
 }

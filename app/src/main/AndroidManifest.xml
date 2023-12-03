@@ -26,6 +26,9 @@
 
         <activity android:name=".PlayActivity">
         </activity>
+
+        <activity android:name=".PlayScreenActivity">
+        </activity>
     </application>
 
 </manifest>
