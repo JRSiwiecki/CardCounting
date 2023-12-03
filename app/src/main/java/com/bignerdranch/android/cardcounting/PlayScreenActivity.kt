@@ -117,6 +117,8 @@ class PlayScreenActivity : AppCompatActivity(){
     }
 
     private fun activateHand(handData: HandData){
+        activeHand = handData
+
         toggleButton(binding.hit, true)
         toggleButton(binding.stay, true)
         if(money >= handData.bet) {
