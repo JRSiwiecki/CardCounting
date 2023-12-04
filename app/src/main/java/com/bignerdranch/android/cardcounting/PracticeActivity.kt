@@ -139,6 +139,9 @@ class PracticeActivity: AppCompatActivity() {
      * "Time Over" if user ran out of time, or "Correct!" or "Incorrect!" depending on if user
      * got the count right. Disables count buttons, and changes their background tints depending
      * on if user was correct or not. Also enables and makes nextCard button visible.
+     *
+     * @param ranOutOfTime Boolean, used to update timer text depending on if user answered in time or not.
+     * @param answer Int, used to track how the user answered for the current card.
      */
     private fun evaluatePlayerAnswer(ranOutOfTime: Boolean, answer: Int) {
         var correctAnswer = 0
