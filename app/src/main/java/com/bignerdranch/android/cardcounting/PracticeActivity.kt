@@ -44,7 +44,7 @@ class PracticeActivity: AppCompatActivity() {
         correctColor = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.green))
         disabledColor = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.gray))
 
-        deck = Deck.Builder().build()
+        deck = Deck.Builder().build(numberOfDecks)
 
         cardView = findViewById(R.id.activecard)
 
@@ -141,6 +141,10 @@ class PracticeActivity: AppCompatActivity() {
     private fun evaluatePlayerAnswer(ranOutOfTime: Boolean, answer: Int) {
         var correctAnswer = 0
         var userIsCorrect = false
+
+        // Timer could keep counting even when player hasn't pressed next card yet,
+        // so cancel it here and start it again when they press the nextCard
+        countdownTimer.cancel()
 
         // Evaluate if user answer was correct or not
         when (activeCard.rank.value) {
