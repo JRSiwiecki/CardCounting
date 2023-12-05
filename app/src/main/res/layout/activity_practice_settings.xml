@@ -61,7 +61,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
     <RadioGroup
-        android:id="@+id/radioGroup"
+        android:id="@+id/challenge_type"
         android:layout_width="239dp"
         android:layout_height="155dp"
         android:layout_marginTop="8dp"
@@ -97,6 +97,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
+        app:layout_constraintTop_toBottomOf="@+id/challenge_type" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
