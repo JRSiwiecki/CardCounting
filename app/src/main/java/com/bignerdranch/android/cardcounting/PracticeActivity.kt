@@ -2,11 +2,10 @@ package com.bignerdranch.android.cardcounting
 
 import android.content.res.ColorStateList
 import android.os.Bundle
-import android.os.CountDownTimer
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.lifecycle.ViewModelProvider
 import com.bignerdranch.android.cardcounting.databinding.ActivityPracticeBinding
 
 class PracticeActivity: AppCompatActivity() {
@@ -41,6 +40,8 @@ class PracticeActivity: AppCompatActivity() {
 
         updateActiveCard()
 
+        countdownTimer = ViewModelProvider(this)[CountDownTimerViewModel::class.java]
+
         startCountdown(cardTimerDuration)
 
         updateCountText()
@@ -55,34 +56,20 @@ class PracticeActivity: AppCompatActivity() {
             resetCountButtons()
             startCountdown(cardTimerDuration)
         }
+
+        countdownTimer.onTimerFinish = {
+            // Player ran out of time, gave no answer (so use -2 as "no answer")
+            evaluatePlayerAnswer(true, -2)
+        }
     }
 
     private fun startCountdown(duration: Long) {
-        countdownTimer = CountDownTimerViewModel().Builder().build(cardTimerDuration)
+        countdownTimer.startCountdown(duration)
 
-        countdownTimer.start()
-
-        fun onTick(millisUntilFinished: Long) {
-            val secondsRemaining = 1 + millisUntilFinished / 1000
-            binding.timer.text = secondsRemaining.toString()
+        // Observe the time remaining LiveData to update your UI
+        countdownTimer.timeRemainingString.observe(this) { timeRemaining ->
+            binding.timer.text = timeRemaining
         }
-
-        /**
-         * countdownTimer = object : CountDownTimer(duration, 1000) {
-         *             override fun onTick(millisUntilFinished: Long) {
-         *                 val secondsRemaining = 1 + millisUntilFinished / 1000
-         *                 binding.timer.text = secondsRemaining.toString()
-         *             }
-         *
-         *             override fun onFinish() {
-         *                 binding.timer.text = "Countdown Finished!"
-         *                 //Failed to put count in time/automatically move to next card
-         *             }
-         *         }
-         */
-
-        // FIXME: Should probably be uncommented when countdownTimer is fixed...
-        // updateActiveCard()
     }
 
     private fun next(delta: Int) {
