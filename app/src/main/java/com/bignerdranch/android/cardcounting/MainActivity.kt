@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.startGameButton.setOnClickListener {
             Log.d(TAG, "start game")
-            val intent = Intent(this, PracticeActivity::class.java)
+            val intent = Intent(this, PracticeSettingsActivity::class.java)
             startActivity(intent)
         }
 
