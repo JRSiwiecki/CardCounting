@@ -2,6 +2,7 @@ package com.bignerdranch.android.cardcounting
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -10,7 +11,7 @@ import com.bignerdranch.android.cardcounting.databinding.ActivityPlayScreenBindi
 
 data class HandData(
     var bet: Float,
-    var cardList: List<String>? = null,
+    var cardList: MutableList<Card> = mutableListOf(),
     var value: Int = 0,
     var aceCount: Int = 0,
 )
@@ -26,11 +27,16 @@ class PlayScreenActivity : AppCompatActivity(){
     private lateinit var dealer: HandData
 
     private lateinit var activeHand: HandData
+    private var activeHandIndex: Int = 0
+
+    private lateinit var deck: Deck
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPlayScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        deck = Deck.Builder().build()
 
         // Retrieve data from the intent
         money = intent.getFloatExtra("money", 0f) // 0f is the default value if the key is not found
@@ -113,11 +119,14 @@ class PlayScreenActivity : AppCompatActivity(){
             gameOver()
         }
 
+        activeHandIndex = 0
         activateHand(hands[0])
+
     }
 
     private fun activateHand(handData: HandData){
         activeHand = handData
+        activeHand = hands[activeHandIndex]
 
         toggleButton(binding.hit, true)
         toggleButton(binding.stay, true)
@@ -126,7 +135,11 @@ class PlayScreenActivity : AppCompatActivity(){
         } else{
             toggleButton(binding.doubleDown, false)
         }
-        //if(handData.card 1 == handData.card && money >= handData.bet 2) toggleButton(binding.split, true) else toggleButton(binding.split, false)
+        if(handData.cardList[0].rank == handData.cardList[1].rank && money >= handData.bet) {
+            toggleButton(binding.split, true)
+        } else {
+            toggleButton(binding.split, false)
+        }
     }
 
     private fun updateHand(handData: HandData){
@@ -140,8 +153,10 @@ class PlayScreenActivity : AppCompatActivity(){
             } else{
                 bustHand(handData)
                 endHand(handData)
+                Log.d("Blackjack", "Bust")
             }
         }
+        Log.d("Blackjack", "The current hand count is:" + handData.value)
     }
 
     private fun toggleButton(button: Button, enabled: Boolean){
@@ -154,7 +169,13 @@ class PlayScreenActivity : AppCompatActivity(){
     }
 
     private fun dealCard(handData: HandData){
-
+        val newCard = deck.dealCard() ?: Card(Suit.SPADES, Rank.TWO)
+        handData.cardList.add(newCard)
+        handData.value += newCard.rank.value
+        if(newCard.rank.value == 11){
+            handData.aceCount ++
+        }
+        Log.d("Blackjack", "The card is a " + newCard.rank.name)
     }
 
     private fun stand(){
@@ -170,9 +191,17 @@ class PlayScreenActivity : AppCompatActivity(){
         //Theoretically all options but stay will be closed, forcing them to stay without recycling any logic
         toggleButton(binding.hit, false)
 
-        dealCard(activeHand)
-        updateHand(activeHand)
+        //money -= activeHand.bet
+        money -= hands[activeHandIndex].bet
+        displayCurrentMoney()
 
+        //activeHand.bet *= 2
+        hands[activeHandIndex].bet *= 2
+
+        //dealCard(activeHand)
+        dealCard(hands[activeHandIndex])
+        //updateHand(activeHand)
+        updateHand(hands[activeHandIndex])
 
     }
 
@@ -183,6 +212,8 @@ class PlayScreenActivity : AppCompatActivity(){
 
     private fun clearHand(handData: HandData){
         //remove hand from table and list
+        hands.removeAt(activeHandIndex)
+        activeHandIndex --
     }
 
     private fun bustHand(handData: HandData){
@@ -192,10 +223,21 @@ class PlayScreenActivity : AppCompatActivity(){
     private fun endHand(handData: HandData){
         //if theres another hand    activate the next hand
         //else dealerturn
-
+        activeHandIndex ++
+        if(activeHandIndex < hands.size){
+            activateHand(hands[activeHandIndex])
+        } else{
+            dealerTurn()
+        }
     }
 
     private fun dealerTurn(){
+
+        if(hands.isEmpty()){
+            gameOver()
+            return
+        }
+
         while(dealer.value < 17 || dealer.value == 17 && dealer.aceCount > 0){
             dealCard(dealer)
         }
