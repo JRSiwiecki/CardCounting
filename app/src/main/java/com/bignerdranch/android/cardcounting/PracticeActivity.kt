@@ -2,6 +2,7 @@ package com.bignerdranch.android.cardcounting
 
 import android.content.res.ColorStateList
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -18,17 +19,31 @@ class PracticeActivity: AppCompatActivity() {
     private lateinit var correctColor: ColorStateList
     private lateinit var disabledColor: ColorStateList
 
+    // Score variables
     private var count: Int = 0
     private var cardsShown: Int = 0
     private var cardsCorrect: Int = 0
 
-    private val cardTimerDuration: Long = 5000
+    // Settings variables
+    private var numberOfDecks: Int = 1
+    private var timePerCard: Int = 5
+    private var challengeType: ChallengeType = ChallengeType.EASY
 
+    private val cardTimerDuration: Long = 5000
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPracticeBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        numberOfDecks = intent.getIntExtra("NUMBER_OF_DECKS", 1)
+        timePerCard = intent.getIntExtra("TIME_PER_CARD", 5)
+        challengeType = intent.getSerializableExtra("CHALLENGE_TYPE") as ChallengeType
+            ?: ChallengeType.EASY
+
+        Log.d("prac", numberOfDecks.toString())
+        Log.d("prac", timePerCard.toString())
+        Log.d("prac", challengeType.toString())
 
         defaultColor = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.purple_500))
         correctColor = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.green))
