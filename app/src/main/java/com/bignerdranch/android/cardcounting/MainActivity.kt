@@ -18,11 +18,19 @@ class MainActivity : AppCompatActivity() {
 
         binding.startGameButton.setOnClickListener {
             Log.d(TAG, "start game")
+            val intent = Intent(this, PracticeActivity::class.java)
+            startActivity(intent)
         }
 
         binding.instructionsButton.setOnClickListener {
             Log.d(TAG, "instructions")
             val intent = Intent(this, InstructionsActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.startBlackjackButton.setOnClickListener {
+            Log.d(TAG, "blackjack")
+            val intent = Intent(this, PlayActivity::class.java)
             startActivity(intent)
         }
     }
