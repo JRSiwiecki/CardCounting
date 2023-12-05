@@ -140,6 +140,7 @@ class PlayScreenActivity : AppCompatActivity(){
         } else {
             toggleButton(binding.split, false)
         }
+        Log.d("Blackjack", "The starting hand value is:" + handData.value)
     }
 
     private fun updateHand(handData: HandData){
@@ -156,7 +157,7 @@ class PlayScreenActivity : AppCompatActivity(){
                 Log.d("Blackjack", "Bust")
             }
         }
-        Log.d("Blackjack", "The current hand count is:" + handData.value)
+        Log.d("Blackjack", "The current hand value is:" + handData.value)
     }
 
     private fun toggleButton(button: Button, enabled: Boolean){
@@ -178,16 +179,35 @@ class PlayScreenActivity : AppCompatActivity(){
         Log.d("Blackjack", "The card is a " + newCard.rank.name)
     }
 
+    private fun recalculateHandValue(handData: HandData){
+        handData.value = 0
+        handData.aceCount = 0
+        for(card in handData.cardList){
+            handData.value += card.rank.value
+            if(card.rank.value == 11){
+                handData.aceCount ++
+            }
+
+            if(handData.value > 21 && handData.aceCount > 0){
+                handData.value -= 10
+                handData.aceCount --
+            }
+        }
+    }
+
     private fun stand(){
+        Log.d("Blackjack", "Standing at: " + hands[activeHandIndex].value)
         endHand(activeHand)
     }
 
     private  fun hit(){
+        Log.d("Blackjack", "Hit")
         dealCard(activeHand)
         updateHand(activeHand)
     }
 
     private fun double(){
+        Log.d("Blackjack", "Double")
         //Theoretically all options but stay will be closed, forcing them to stay without recycling any logic
         toggleButton(binding.hit, false)
 
@@ -206,8 +226,34 @@ class PlayScreenActivity : AppCompatActivity(){
     }
 
     private fun split(){
+        Log.d("Blackjack", "Split")
         //create a new hand with one of the card, deal a new card to each of those hands, and then continue with this hand
         //technically not the same card order but really doesnt matter
+
+        money -= hands[activeHandIndex].bet
+        displayCurrentMoney()
+
+        val movedcard = hands[activeHandIndex].cardList[0]
+        Log.d("Blackjack", "The split card is: " + movedcard.display)
+        hands[activeHandIndex].cardList.removeAt(0)
+        recalculateHandValue(hands[activeHandIndex])
+
+        //Add a new hand to the list, and split the cards between the two
+        hands.add(activeHandIndex, HandData(bet = hands[activeHandIndex].bet))
+
+        hands[activeHandIndex].cardList.add(movedcard)
+        recalculateHandValue(hands[activeHandIndex])
+
+        dealCard(hands[activeHandIndex])
+        updateHand(hands[activeHandIndex])
+        Log.d("Blackjack", "The right hands size is + : " + hands[activeHandIndex].cardList.size)
+
+        dealCard(hands[activeHandIndex + 1])
+        updateHand(hands[activeHandIndex + 1])
+        Log.d("Blackjack", "The right hands size is + : " + hands[activeHandIndex+1].cardList.size)
+
+        activateHand(hands[activeHandIndex])
+
     }
 
     private fun clearHand(handData: HandData){
