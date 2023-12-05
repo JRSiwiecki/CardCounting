@@ -2,7 +2,6 @@ package com.bignerdranch.android.cardcounting
 
 import android.content.res.ColorStateList
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -26,10 +25,8 @@ class PracticeActivity: AppCompatActivity() {
 
     // Settings variables
     private var numberOfDecks: Int = 1
-    private var timePerCard: Int = 5
+    private var timePerCardMillis: Long = 5000
     private var challengeType: ChallengeType = ChallengeType.EASY
-
-    private val cardTimerDuration: Long = 5000
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,13 +34,11 @@ class PracticeActivity: AppCompatActivity() {
         setContentView(binding.root)
 
         numberOfDecks = intent.getIntExtra("NUMBER_OF_DECKS", 1)
-        timePerCard = intent.getIntExtra("TIME_PER_CARD", 5)
+        var timePerCardSeconds = intent.getIntExtra("TIME_PER_CARD", 5)
         challengeType = intent.getSerializableExtra("CHALLENGE_TYPE") as ChallengeType
             ?: ChallengeType.EASY
 
-        Log.d("prac", numberOfDecks.toString())
-        Log.d("prac", timePerCard.toString())
-        Log.d("prac", challengeType.toString())
+        timePerCardMillis = timePerCardSeconds.toLong() * 1000
 
         defaultColor = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.purple_500))
         correctColor = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.green))
@@ -57,7 +52,7 @@ class PracticeActivity: AppCompatActivity() {
 
         countdownTimer = ViewModelProvider(this)[CountDownTimerViewModel::class.java]
 
-        startCountdown(cardTimerDuration)
+        startCountdown(timePerCardMillis)
 
         updateCountText()
 
@@ -69,7 +64,7 @@ class PracticeActivity: AppCompatActivity() {
             disableNextCardButton()
             updateActiveCard()
             resetCountButtons()
-            startCountdown(cardTimerDuration)
+            startCountdown(timePerCardMillis)
         }
 
         countdownTimer.onTimerFinish = {
@@ -98,8 +93,6 @@ class PracticeActivity: AppCompatActivity() {
         startCountdown(5000)
 
         evaluatePlayerAnswer(false, delta)
-
-        //Can add card logic/switches here
     }
 
     private fun updateCountText() {
