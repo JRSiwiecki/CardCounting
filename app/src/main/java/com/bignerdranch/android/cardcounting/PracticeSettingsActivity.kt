@@ -24,7 +24,7 @@ class PracticeSettingsActivity: AppCompatActivity() {
             startActivity(intent)
         }
 
-        binding.numberOfDecks.maxValue = 4
+        binding.numberOfDecks.maxValue = 8
         binding.numberOfDecks.minValue = 1
     }
 
