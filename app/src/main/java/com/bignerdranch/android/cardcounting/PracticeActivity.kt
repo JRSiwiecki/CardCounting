@@ -34,9 +34,8 @@ class PracticeActivity: AppCompatActivity() {
         setContentView(binding.root)
 
         numberOfDecks = intent.getIntExtra("NUMBER_OF_DECKS", 1)
-        var timePerCardSeconds = intent.getIntExtra("TIME_PER_CARD", 5)
+        val timePerCardSeconds = intent.getIntExtra("TIME_PER_CARD", 5)
         challengeType = intent.getSerializableExtra("CHALLENGE_TYPE") as ChallengeType
-            ?: ChallengeType.EASY
 
         timePerCardMillis = timePerCardSeconds.toLong() * 1000
 
@@ -60,10 +59,31 @@ class PracticeActivity: AppCompatActivity() {
         binding.minuscount.setOnClickListener { next(-1) }
         binding.nocount.setOnClickListener { next(0) }
 
+        // Disable count buttons, disable count text,
+        // display nextCard button only on hard mode.
+        if (challengeType == ChallengeType.HARD) {
+            binding.pluscount.isVisible = false
+            binding.minuscount.isVisible = false
+            binding.nocount.isVisible = false
+
+            binding.count.isVisible = false
+
+            binding.nextCard.isVisible = true
+            binding.nextCard.isEnabled = true
+        }
+
         binding.nextCard.setOnClickListener {
-            disableNextCardButton()
+            countdownTimer.cancel()
+
             updateActiveCard()
-            resetCountButtons()
+
+            // If on hard mode, don't display count buttons,
+            // don't disable nextCard button.
+            if (challengeType != ChallengeType.HARD) {
+                resetCountButtons()
+                disableNextCardButton()
+            }
+
             startCountdown(timePerCardMillis)
         }
 
@@ -132,19 +152,20 @@ class PracticeActivity: AppCompatActivity() {
      * Evaluates player answer and updates UI accordingly.
      * Tracks if userIsCorrect to increment cardsCorrect, updates timer to display either:
      * "Time Over" if user ran out of time, or "Correct!" or "Incorrect!" depending on if user
-     * got the count right. Disables count buttons, and changes their background tints depending
+     * got the count right, or just "Answered!" if user is on NORMAL or HARD.
+     * Disables count buttons, and changes their background tints depending
      * on if user was correct or not. Also enables and makes nextCard button visible.
      *
      * @param ranOutOfTime Boolean, used to update timer text depending on if user answered in time or not.
      * @param answer Int, used to track how the user answered for the current card.
      */
     private fun evaluatePlayerAnswer(ranOutOfTime: Boolean, answer: Int) {
-        var correctAnswer = 0
-        var userIsCorrect = false
-
         // Timer could keep counting even when player hasn't pressed next card yet,
         // so cancel it here and start it again when they press the nextCard
         countdownTimer.cancel()
+
+        var correctAnswer = 0
+        var userIsCorrect = false
 
         // Evaluate if user answer was correct or not
         when (activeCard.rank.value) {
@@ -162,13 +183,54 @@ class PracticeActivity: AppCompatActivity() {
             }
         }
 
-        binding.timer.text = if (ranOutOfTime) "Timer Over!" else if (userIsCorrect)  "Correct!" else "Incorrect!"
-
         // Keep track of number of correct answers
         if (userIsCorrect) {
             cardsCorrect += 1
         }
 
+        // Change actions upon user answer based on their chosen ChallengeType
+        when (challengeType) {
+
+            // If ChallengeType is EASY, show if the user was correct and display correct answer.
+            ChallengeType.EASY -> {
+                binding.timer.text = if (ranOutOfTime) "Timer Over!" else if (userIsCorrect) "Correct!" else "Incorrect!"
+
+                handleButtonsAndNextCard(correctAnswer)
+            }
+
+            // If ChallengeType is NORMAL, allow user to use count buttons, but do not show if correct.
+            ChallengeType.NORMAL -> {
+                binding.timer.text = if (ranOutOfTime) "Time Over!" else "Answered!"
+
+                handleButtonsAndNextCard(0)
+            }
+
+            // If ChallengeType is HARD, do not allow user to use count buttons.
+            // TODO: Maybe make next card button always visible?
+            ChallengeType.HARD -> {
+                binding.timer.text = if (ranOutOfTime) "Time Over!" else "Answered!"
+
+                // Hide count buttons in HARD mode
+                binding.pluscount.isVisible = false
+                binding.nocount.isVisible = false
+                binding.minuscount.isVisible = false
+
+                // Enable and make nextCard button visible
+                binding.nextCard.isVisible = true
+                binding.nextCard.isEnabled = true
+
+                handleButtonsAndNextCard(correctAnswer)
+            }
+        }
+    }
+
+    /**
+     * Disable count buttons, set their disabled colors, show nextCard button, and show
+     * correctAnswer if ChallengeType is EASY.
+     *
+     * @param correctAnswer Int. Represents the correctAnswer for the activeCard.
+     */
+    private fun handleButtonsAndNextCard(correctAnswer: Int) {
         // Disable count buttons
         binding.pluscount.isEnabled = false
         binding.nocount.isEnabled = false
@@ -179,16 +241,19 @@ class PracticeActivity: AppCompatActivity() {
         binding.nocount.backgroundTintList = disabledColor
         binding.pluscount.backgroundTintList = disabledColor
 
-        // Highlight correct button green
+        // Display and enable nextCard button
+        binding.nextCard.isVisible = true
+        binding.nextCard.isEnabled = true
+
+        // Highlight correct button green only if challengeType is EASY,
+        // otherwise exit early
+        if (challengeType != ChallengeType.EASY) return
+
         when (correctAnswer) {
             -1 -> binding.minuscount.backgroundTintList = correctColor
             0 -> binding.nocount.backgroundTintList = correctColor
             1 -> binding.pluscount.backgroundTintList = correctColor
         }
-
-        // Display and enable nextCard button
-        binding.nextCard.isVisible = true
-        binding.nextCard.isEnabled = true
     }
 
     /**
