@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">CardCounting</string>
+    <string name="blackjack_dealer_desc">Blackjack 3:2, dealer hits until 17</string>
+    <string name="blackjack_hit">Hit</string>
+    <string name="blackjack_stay">Stay</string>
+    <string name="blackjack_double">Double</string>
+    <string name="blackjack_split">Split</string>
+    <string name="blackjack_hand_value">Hand: </string>
+    <string name="blackjack_hand_bet">Bet: </string>
+
 </resources>
