@@ -27,6 +27,12 @@
         <activity android:name=".PracticeActivity">
         </activity>
 
+        <activity android:name=".PracticeEndingActivity">
+        </activity>
+
+        <activity android:name=".PracticePopupActivity">
+        </activity>
+
         <activity android:name=".PlayActivity">
         </activity>
 
