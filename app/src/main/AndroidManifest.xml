@@ -21,6 +21,9 @@
         <activity android:name=".InstructionsActivity">
         </activity>
 
+        <activity android:name=".PracticeSettingsActivity">
+        </activity>
+
         <activity android:name=".PracticeActivity">
         </activity>
 

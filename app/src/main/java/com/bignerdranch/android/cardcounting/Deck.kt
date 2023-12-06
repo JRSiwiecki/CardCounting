@@ -33,9 +33,6 @@ class Deck private constructor(): CardHolder() {
 
 
     private fun loadDeck() {
-        // Clear existing cards
-        cards.clear()
-
         val suits = ArrayList<Suit>()
 
         for (suit in Suit.values())
@@ -51,14 +48,17 @@ class Deck private constructor(): CardHolder() {
         cards.shuffle()
     }
 
+    private fun clearDeck() {
+        cards.clear()
+    }
+
     /**
      * Deals one card at a time
      */
     fun dealCard() : Card? {
         if (cards.size == 0) {
+            clearDeck()
             loadDeck()
-
-            // shuffle deck after loading,
             shuffleDeck()
         }
 
