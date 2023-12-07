@@ -116,12 +116,9 @@ class PracticeActivity: AppCompatActivity() {
     }
 
     private fun next(delta: Int) {
-
         countdownTimer.cancel()
 
         count += delta
-
-        updateTexts()
 
         startCountdown(timePerCardMillis)
 
@@ -154,9 +151,6 @@ class PracticeActivity: AppCompatActivity() {
             activeCard.rank.symbol,
             activeCard.suit.symbol.toString()
         )
-
-        // Update count as true count based on number of decksRemaining
-        count = ceil(count.toDouble() / decksRemaining.toDouble()).toInt()
 
         // Update game progress
         // Ends game when reaching 50% of deck
@@ -337,7 +331,7 @@ class PracticeActivity: AppCompatActivity() {
             finish()
         }else{
             val intent = Intent(this, PracticeEndingActivity::class.java)
-            intent.putExtra("FINAL_SCORE", count)
+            intent.putExtra("FINAL_SCORE", (count / decksRemaining))
             intent.putExtra("CORRECT_ANSWERS", cardsCorrect)
             intent.putExtra("CORRECT_COUNT", calculateTrueCount())
             intent.putExtra("CHALLENGE_TYPE", challengeType)
