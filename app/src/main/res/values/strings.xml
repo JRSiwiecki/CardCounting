@@ -5,7 +5,10 @@
     <string name="blackjack_stay">Stay</string>
     <string name="blackjack_double">Double</string>
     <string name="blackjack_split">Split</string>
-    <string name="blackjack_hand_value">Hand: </string>
+    <string name="blackjack_player_hand_value">Player: </string>
+    <string name="blackjack_dealer_hand_value">Dealer: </string>
     <string name="blackjack_hand_bet">Bet: </string>
+    <string name="btn_return">Return</string>
+    <string name="blackjack_player_money">Money: 100</string>
 
 </resources>

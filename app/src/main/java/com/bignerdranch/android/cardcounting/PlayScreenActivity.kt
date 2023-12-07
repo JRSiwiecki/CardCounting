@@ -23,6 +23,15 @@ class PlayScreenActivity : AppCompatActivity(){
     private lateinit var moneyTextView: TextView
     private lateinit var betAmounts: MutableList<Float>
 
+    private lateinit var dealerCard1: CardView
+    private lateinit var dealerCard2: CardView
+    private lateinit var dealerCard3: CardView
+    private lateinit var dealerCard4: CardView
+    private lateinit var dealerCard5: CardView
+    private lateinit var dealerCard6: CardView
+    private lateinit var dealerCard7: CardView
+    private lateinit var dealerCard8: CardView
+
     private var hands: MutableList<HandData> = mutableListOf()  // Initialize the list
     private lateinit var dealer: HandData
 

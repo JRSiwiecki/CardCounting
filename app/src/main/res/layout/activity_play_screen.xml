@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Money: 100"
+        android:text="@string/blackjack_player_money"
         android:textSize="34sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="Return"
+        android:text="@string/btn_return"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -55,54 +55,62 @@
         <Button
             android:id="@+id/hit"
             style="@style/ActionButton"
-            android:layout_width="85dp"
+            android:layout_width="84dp"
             android:layout_height="64dp"
-            android:layout_marginStart="12dp"
+            android:layout_marginStart="16dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="16dp"
+            android:textSize="14sp"
             android:text="@string/blackjack_hit"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/stay"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="VisualLintButtonSize" />
 
         <Button
             android:id="@+id/stay"
             style="@style/ActionButton"
-            android:layout_width="85dp"
+            android:layout_width="84dp"
             android:layout_height="64dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="16dp"
+            android:textSize="14sp"
             android:text="@string/blackjack_stay"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/double_down"
-            app:layout_constraintStart_toEndOf="@+id/hit" />
+            app:layout_constraintStart_toEndOf="@+id/hit"
+            tools:ignore="VisualLintButtonSize" />
 
         <Button
             android:id="@+id/double_down"
             style="@style/ActionButton"
-            android:layout_width="85dp"
+            android:layout_width="84dp"
             android:layout_height="64dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="16dp"
+            android:textSize="14sp"
             android:text="@string/blackjack_double"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/split"
-            app:layout_constraintStart_toEndOf="@+id/stay" />
+            app:layout_constraintStart_toEndOf="@+id/stay"
+            tools:ignore="VisualLintButtonSize,VisualLintBounds" />
 
         <Button
             android:id="@+id/split"
             style="@style/ActionButton"
-            android:layout_width="85dp"
+            android:layout_width="84dp"
             android:layout_height="64dp"
             android:layout_marginStart="8dp"
-            android:layout_marginEnd="12dp"
+            android:layout_marginEnd="0dp"
             android:layout_marginBottom="16dp"
+            android:textSize="14sp"
             android:text="@string/blackjack_split"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/double_down" />
+            app:layout_constraintStart_toEndOf="@+id/double_down"
+            tools:ignore="VisualLintButtonSize" />
 
     </LinearLayout>
 
@@ -196,6 +204,13 @@
             android:scaleType="centerInside"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:layout_height="32dp"
+            android:layout_width="match_parent"
+            android:id="@+id/dealer_hand_value"
+            android:text="@string/blackjack_dealer_hand_value"
+            android:textSize="24sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -288,13 +303,27 @@
             android:scaleType="centerInside"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
-
-        <TextView
-            android:layout_height="32dp"
+        <LinearLayout
             android:layout_width="match_parent"
-            >
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        </TextView>
+            <TextView
+                android:layout_height="32dp"
+                android:layout_width="match_parent"
+                android:id="@+id/player_hand_value"
+                android:text="@string/blackjack_player_hand_value"
+                android:textSize="24sp" />
+
+            <TextView
+                android:layout_height="32dp"
+                android:layout_width="match_parent"
+                android:id="@+id/player_hand_bet_value"
+                android:text="@string/blackjack_hand_bet"
+                android:textSize="24sp" />
+        </LinearLayout>
+
+
     </LinearLayout>
 
 
