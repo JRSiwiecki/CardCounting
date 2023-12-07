@@ -8,7 +8,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import com.bignerdranch.android.cardcounting.databinding.ActivityPracticeBinding
-import java.util.Random
+import kotlin.math.ceil
 
 class PracticeActivity: AppCompatActivity() {
     private lateinit var binding: ActivityPracticeBinding
@@ -118,7 +118,7 @@ class PracticeActivity: AppCompatActivity() {
 
         updateCountText()
 
-        startCountdown(5000)
+        startCountdown(timePerCardMillis)
 
         evaluatePlayerAnswer(false, delta)
     }
@@ -153,6 +153,7 @@ class PracticeActivity: AppCompatActivity() {
             endPracticeSession()
         }
 
+        decksRemaining = (ceil((numberOfDecks * 52.0 - cardsShown) / 52.0)).toInt()
         cardsShown += 1
         
         //counter for correct answer when hard mode
@@ -318,6 +319,9 @@ class PracticeActivity: AppCompatActivity() {
 
     // Add a method to end the practice session
     private fun endPracticeSession() {
+        correctFinalCount = (correctFinalCount / decksRemaining)
+        count = (count / decksRemaining)
+
         // you can start the ending activity
         if (challengeType == ChallengeType.HARD){
             val popupIntent = Intent(this, PracticePopupActivity::class.java)
