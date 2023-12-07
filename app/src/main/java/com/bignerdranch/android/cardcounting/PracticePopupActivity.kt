@@ -13,15 +13,16 @@ class PracticePopupActivity: AppCompatActivity() {
         binding = ActivityPracticePopupBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val continueCount = intent.getIntExtra("CORRECT_COUNT", 0)
 
         binding.continueFinalButton.setOnClickListener{
             val resultIntent = Intent(this, PracticeEndingActivity::class.java)
 
-            val continueCount = intent.getIntExtra("CORRECT_COUNT", 0)
             val userCount = binding.countInput.text.toString().toIntOrNull() ?: 0
 
             resultIntent.putExtra("FINAL_SCORE", userCount)
             resultIntent.putExtra("CORRECT_COUNT", continueCount)
+            resultIntent.putExtra("CHALLENGE_TYPE", ChallengeType.HARD)
 
             startActivity(resultIntent)
         }
