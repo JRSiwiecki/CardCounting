@@ -15,15 +15,14 @@
         android:textSize="60sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/activecard"
-        app:layout_constraintEnd_toStartOf="@+id/decksRemaining"
-        app:layout_constraintStart_toEndOf="@+id/cardsShown" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/decksRemaining"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="64dp"
-        android:layout_marginEnd="64dp"
+        android:layout_marginStart="250dp"
         android:layout_marginBottom="8dp"
         android:text="0"
         android:textAlignment="textStart"
@@ -31,7 +30,7 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/activecard"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/count" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <com.bignerdranch.android.cardcounting.CardView
         android:id="@+id/activecard"
@@ -129,15 +128,14 @@
         android:id="@+id/cardsShown"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="64dp"
-        android:layout_marginEnd="64dp"
+        android:layout_marginEnd="250dp"
         android:layout_marginBottom="8dp"
         android:text="0"
         android:textAlignment="textStart"
         android:textSize="60sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/activecard"
-        app:layout_constraintEnd_toStartOf="@+id/count"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
@@ -159,12 +157,10 @@
         android:layout_width="73dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="45dp"
-        android:layout_marginEnd="52dp"
         android:ems="10"
         android:inputType="text"
         android:text="Total Cards"
         app:layout_constraintBottom_toTopOf="@+id/cardsShown"
-        app:layout_constraintEnd_toStartOf="@+id/yourCountTitle"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
