@@ -326,6 +326,7 @@ class PracticeActivity: AppCompatActivity() {
         if (challengeType == ChallengeType.HARD){
             val popupIntent = Intent(this, PracticePopupActivity::class.java)
             popupIntent.putExtra("CORRECT_COUNT", calculateTrueCount())
+            popupIntent.putExtra("DECKS_REMAINING", decksRemaining)
 
             startActivity(popupIntent)
             finish()

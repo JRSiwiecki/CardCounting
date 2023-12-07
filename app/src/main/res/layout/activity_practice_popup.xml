@@ -41,4 +41,39 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/count_Input" />
 
+    <TextView
+        android:id="@+id/decksRemainingTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Decks Left"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+    <TextView
+        android:id="@+id/decksRemainingPopup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/count_Input"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/decksRemainingTitle" />
+
+    <TextView
+        android:id="@+id/decksRemainingHint"
+        android:layout_width="310dp"
+        android:layout_height="66dp"
+        android:text="True Count\n = (Your Count // Decks Left)"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/continue_final_button"
+        app:layout_constraintVertical_bias="0.505" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
