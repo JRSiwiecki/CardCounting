@@ -23,6 +23,7 @@ class PracticeActivity: AppCompatActivity() {
     // Score variables
     private var count: Int = 0
     private var cardsShown: Int = 0
+    private var decksRemaining: Int = 0
     private var cardsCorrect: Int = 0
     private var correctFinalCount = 0
 
@@ -145,15 +146,14 @@ class PracticeActivity: AppCompatActivity() {
             activeCard.suit.symbol.toString()
         )
 
-        cardsShown += 1
-
         // Update game progress
-        // Ends game when reaching 50% of deck 
+        // Ends game when reaching 50% of deck
         val progressPercentage = (cardsShown.toDouble() / totalCardsInDeck) * 100
         if (progressPercentage >= 50) {
             endPracticeSession()
-
         }
+
+        cardsShown += 1
         
         //counter for correct answer when hard mode
         if(challengeType == ChallengeType.HARD) {
