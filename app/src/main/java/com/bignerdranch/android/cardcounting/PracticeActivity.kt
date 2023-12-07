@@ -8,7 +8,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import com.bignerdranch.android.cardcounting.databinding.ActivityPracticeBinding
-import java.util.Random
+import kotlin.math.ceil
 
 class PracticeActivity: AppCompatActivity() {
     private lateinit var binding: ActivityPracticeBinding
@@ -20,13 +20,15 @@ class PracticeActivity: AppCompatActivity() {
     private lateinit var correctColor: ColorStateList
     private lateinit var disabledColor: ColorStateList
 
+
     // Score variables
     private var count: Int = 0
     private var cardsShown: Int = 0
+    private var decksRemaining: Int = 1
     private var cardsCorrect: Int = 0
-    private var correctFinalCount = 0
+    private var shownCardValues: MutableList<Int> = mutableListOf()
 
-    // Settings variables
+        // Settings variables
     private var numberOfDecks: Int = 1
     private var timePerCardMillis: Long = 5000
     private var challengeType: ChallengeType = ChallengeType.EASY
@@ -50,6 +52,8 @@ class PracticeActivity: AppCompatActivity() {
 
         deck = Deck.Builder().build(numberOfDecks)
 
+        decksRemaining = (ceil((numberOfDecks * 52 - cardsShown) / 52.0)).toInt()
+
         totalCardsInDeck = numberOfDecks * 52
 
         cardView = findViewById(R.id.activecard)
@@ -60,7 +64,7 @@ class PracticeActivity: AppCompatActivity() {
 
         startCountdown(timePerCardMillis)
 
-        updateCountText()
+        updateTexts()
 
         binding.pluscount.setOnClickListener { next(1) }
         binding.minuscount.setOnClickListener { next(-1) }
@@ -74,6 +78,7 @@ class PracticeActivity: AppCompatActivity() {
             binding.nocount.isVisible = false
 
             binding.count.isVisible = false
+            binding.yourCountTitle.isVisible = false
 
             binding.nextCard.isVisible = true
             binding.nextCard.isEnabled = true
@@ -83,6 +88,7 @@ class PracticeActivity: AppCompatActivity() {
             countdownTimer.cancel()
 
             updateActiveCard()
+            updateTexts()
 
             // If on hard mode, don't display count buttons,
             // don't disable nextCard button.
@@ -110,20 +116,19 @@ class PracticeActivity: AppCompatActivity() {
     }
 
     private fun next(delta: Int) {
-
         countdownTimer.cancel()
 
         count += delta
 
-        updateCountText()
-
-        startCountdown(5000)
+        startCountdown(timePerCardMillis)
 
         evaluatePlayerAnswer(false, delta)
     }
 
-    private fun updateCountText() {
-        binding.count.text = "Count: $count"
+    private fun updateTexts() {
+        binding.count.text = "$count"
+        binding.decksRemaining.text = "$decksRemaining"
+        binding.cardsShown.text = "$cardsShown"
     }
 
     /**
@@ -137,6 +142,8 @@ class PracticeActivity: AppCompatActivity() {
         // Get next card from deck
         activeCard = getCardFromDeck()
 
+        decksRemaining = (ceil((numberOfDecks * 52 - cardsShown) / 52.0)).toInt()
+
         // Update custom view
         cardView.setSymbols(
             activeCard.rank.symbol,
@@ -145,34 +152,15 @@ class PracticeActivity: AppCompatActivity() {
             activeCard.suit.symbol.toString()
         )
 
-        cardsShown += 1
-
         // Update game progress
-        // Ends game when reaching 50% of deck 
+        // Ends game when reaching 50% of deck
         val progressPercentage = (cardsShown.toDouble() / totalCardsInDeck) * 100
         if (progressPercentage >= 50) {
             endPracticeSession()
-
-        }
-        
-        //counter for correct answer when hard mode
-        if(challengeType == ChallengeType.HARD) {
-            when (activeCard.rank.value) {
-                in 2..6 -> {
-                    correctFinalCount += 1
-                }
-
-                in 7..9 -> {
-                    correctFinalCount += 0
-                }
-
-                else -> {
-                    correctFinalCount -= 1
-                }
-            }
         }
 
-        
+        cardsShown += 1
+        shownCardValues.add(activeCard.rank.value)
     }
 
     /**
@@ -208,17 +196,14 @@ class PracticeActivity: AppCompatActivity() {
             in 2..6 -> {
                 userIsCorrect = (answer == 1)
                 correctAnswer = 1
-                correctFinalCount += 1
             }
             in 7..9 -> {
                 userIsCorrect = (answer == 0)
                 correctAnswer = 0
-                correctFinalCount += 0
             }
             else -> {
                 userIsCorrect = (answer == -1)
                 correctAnswer = -1
-                correctFinalCount -= 1
             }
         }
 
@@ -245,7 +230,6 @@ class PracticeActivity: AppCompatActivity() {
             }
 
             // If ChallengeType is HARD, do not allow user to use count buttons.
-            // TODO: Maybe make next card button always visible?
             ChallengeType.HARD -> {
                 binding.timer.text = if (ranOutOfTime) "Time Over!" else "Answered!"
 
@@ -316,20 +300,41 @@ class PracticeActivity: AppCompatActivity() {
         binding.minuscount.backgroundTintList = defaultColor
     }
 
+    private fun calculateTrueCount(): Int {
+        var tempCount = 0
+
+        for (value in shownCardValues) {
+            when (value) {
+                in 2..6 -> {
+                    tempCount += 1
+                }
+                in 7..9 -> {
+                    // Do nothing...
+                }
+                else -> {
+                    tempCount -= 1
+                }
+            }
+        }
+
+        return (tempCount / decksRemaining)
+    }
+
     // Add a method to end the practice session
     private fun endPracticeSession() {
         // you can start the ending activity
         if (challengeType == ChallengeType.HARD){
             val popupIntent = Intent(this, PracticePopupActivity::class.java)
-            popupIntent.putExtra("CORRECT_COUNT", correctFinalCount)
+            popupIntent.putExtra("CORRECT_COUNT", calculateTrueCount())
+            popupIntent.putExtra("DECKS_REMAINING", decksRemaining)
 
             startActivity(popupIntent)
             finish()
         }else{
             val intent = Intent(this, PracticeEndingActivity::class.java)
-            intent.putExtra("FINAL_SCORE", count)
+            intent.putExtra("FINAL_SCORE", (count / decksRemaining))
             intent.putExtra("CORRECT_ANSWERS", cardsCorrect)
-            intent.putExtra("CORRECT_COUNT", correctFinalCount)
+            intent.putExtra("CORRECT_COUNT", calculateTrueCount())
             intent.putExtra("CHALLENGE_TYPE", challengeType)
 
             startActivity(intent)

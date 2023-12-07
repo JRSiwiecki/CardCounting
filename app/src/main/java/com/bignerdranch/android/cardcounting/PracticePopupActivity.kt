@@ -14,11 +14,15 @@ class PracticePopupActivity: AppCompatActivity() {
         setContentView(binding.root)
 
         val continueCount = intent.getIntExtra("CORRECT_COUNT", 0)
+        val decksRemaining = intent.getIntExtra("DECKS_REMAINING", 0)
 
-        binding.continueFinalButton.setOnClickListener{
+        binding.decksRemainingPopup.text = "$decksRemaining"
+
+            binding.continueFinalButton.setOnClickListener{
             val resultIntent = Intent(this, PracticeEndingActivity::class.java)
 
             val userCount = binding.countInput.text.toString().toIntOrNull() ?: 0
+
 
             resultIntent.putExtra("FINAL_SCORE", userCount)
             resultIntent.putExtra("CORRECT_COUNT", continueCount)
