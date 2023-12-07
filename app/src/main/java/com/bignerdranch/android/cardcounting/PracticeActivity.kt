@@ -1,5 +1,6 @@
 package com.bignerdranch.android.cardcounting
 
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -7,6 +8,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import com.bignerdranch.android.cardcounting.databinding.ActivityPracticeBinding
+import java.util.Random
 
 class PracticeActivity: AppCompatActivity() {
     private lateinit var binding: ActivityPracticeBinding
@@ -22,11 +24,14 @@ class PracticeActivity: AppCompatActivity() {
     private var count: Int = 0
     private var cardsShown: Int = 0
     private var cardsCorrect: Int = 0
+    private var correctFinalCount = 0
 
     // Settings variables
     private var numberOfDecks: Int = 1
     private var timePerCardMillis: Long = 5000
     private var challengeType: ChallengeType = ChallengeType.EASY
+
+    private var totalCardsInDeck: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +49,8 @@ class PracticeActivity: AppCompatActivity() {
         disabledColor = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.gray))
 
         deck = Deck.Builder().build(numberOfDecks)
+
+        totalCardsInDeck = numberOfDecks * 52
 
         cardView = findViewById(R.id.activecard)
 
@@ -123,6 +130,8 @@ class PracticeActivity: AppCompatActivity() {
      * Updates activeCard using getCardFromDeck,
      * updates cardView accordingly,
      * increments cardsShown.
+     * Keeps track of game progress,
+     * game will end with cardsShown reaches progress threshhold(50%)
      */
     private fun updateActiveCard() {
         // Get next card from deck
@@ -137,6 +146,33 @@ class PracticeActivity: AppCompatActivity() {
         )
 
         cardsShown += 1
+
+        // Update game progress
+        // Ends game when reaching 50% of deck 
+        val progressPercentage = (cardsShown.toDouble() / totalCardsInDeck) * 100
+        if (progressPercentage >= 50) {
+            endPracticeSession()
+
+        }
+        
+        //counter for correct answer when hard mode
+        if(challengeType == ChallengeType.HARD) {
+            when (activeCard.rank.value) {
+                in 2..6 -> {
+                    correctFinalCount += 1
+                }
+
+                in 7..9 -> {
+                    correctFinalCount += 0
+                }
+
+                else -> {
+                    correctFinalCount -= 1
+                }
+            }
+        }
+
+        
     }
 
     /**
@@ -172,14 +208,17 @@ class PracticeActivity: AppCompatActivity() {
             in 2..6 -> {
                 userIsCorrect = (answer == 1)
                 correctAnswer = 1
+                correctFinalCount += 1
             }
             in 7..9 -> {
                 userIsCorrect = (answer == 0)
                 correctAnswer = 0
+                correctFinalCount += 0
             }
             else -> {
                 userIsCorrect = (answer == -1)
                 correctAnswer = -1
+                correctFinalCount -= 1
             }
         }
 
@@ -275,5 +314,27 @@ class PracticeActivity: AppCompatActivity() {
         binding.pluscount.backgroundTintList = defaultColor
         binding.nocount.backgroundTintList = defaultColor
         binding.minuscount.backgroundTintList = defaultColor
+    }
+
+    // Add a method to end the practice session
+    private fun endPracticeSession() {
+        // you can start the ending activity
+        if (challengeType == ChallengeType.HARD){
+            val popupIntent = Intent(this, PracticePopupActivity::class.java)
+            popupIntent.putExtra("CORRECT_COUNT", correctFinalCount)
+
+            startActivity(popupIntent)
+            finish()
+        }else{
+            val intent = Intent(this, PracticeEndingActivity::class.java)
+            intent.putExtra("FINAL_SCORE", count)
+            intent.putExtra("CORRECT_ANSWERS", cardsCorrect)
+            intent.putExtra("CORRECT_COUNT", correctFinalCount)
+            intent.putExtra("CHALLENGE_TYPE", challengeType)
+
+            startActivity(intent)
+            finish()
+        }
+
     }
 }
