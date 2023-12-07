@@ -5,9 +5,12 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bignerdranch.android.cardcounting.databinding.ActivityBettingBinding
 import com.bignerdranch.android.cardcounting.databinding.ActivityPlayScreenBinding
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 
 data class HandData(
     var bet: Float,
@@ -23,6 +26,7 @@ class PlayScreenActivity : AppCompatActivity(){
     private lateinit var moneyTextView: TextView
     private lateinit var betAmounts: MutableList<Float>
 
+    private var paused: Boolean = false
     private lateinit var dealerCard1: CardView
     private lateinit var dealerCard2: CardView
     private lateinit var dealerCard3: CardView
@@ -84,6 +88,7 @@ class PlayScreenActivity : AppCompatActivity(){
     }
 
     private fun startBlackJack(){
+        Log.d("Blackjack", "Starting a new round")
         for(value in betAmounts){
             if(value > 0){
                 hands.add(HandData(bet = value))
@@ -109,6 +114,7 @@ class PlayScreenActivity : AppCompatActivity(){
         for(hand in hands){
             if(hand.value == 21){
                 if(dealer.value < 21){
+                    DisplayToast("Blackjack!")
                     money += (hand.bet * 2.5f)
                     displayCurrentMoney()
                 }else{
@@ -120,6 +126,7 @@ class PlayScreenActivity : AppCompatActivity(){
         }
 
         if(dealer.value == 21){
+            DisplayToast("Dealer Blackjack!")
             for(hand in hands){
                 clearHand(hand)
             }
@@ -159,10 +166,11 @@ class PlayScreenActivity : AppCompatActivity(){
         if(handData.value > 21){
             if(handData.aceCount > 0){
                 handData.value -= 10
-                handData.aceCount += 10
+                handData.aceCount -= 1
             } else{
                 bustHand(handData)
                 endHand(handData)
+                DisplayToast("Bust!")
                 Log.d("Blackjack", "Bust")
             }
         }
@@ -205,17 +213,29 @@ class PlayScreenActivity : AppCompatActivity(){
     }
 
     private fun stand(){
+        if(paused){
+            return
+        }
+
         Log.d("Blackjack", "Standing at: " + hands[activeHandIndex].value)
         endHand(activeHand)
     }
 
     private  fun hit(){
+        if(paused){
+            return
+        }
+
         Log.d("Blackjack", "Hit")
         dealCard(activeHand)
         updateHand(activeHand)
     }
 
     private fun double(){
+        if(paused){
+            return
+        }
+
         Log.d("Blackjack", "Double")
         //Theoretically all options but stay will be closed, forcing them to stay without recycling any logic
         toggleButton(binding.hit, false)
@@ -235,6 +255,9 @@ class PlayScreenActivity : AppCompatActivity(){
     }
 
     private fun split(){
+        if(paused){
+            return
+        }
         Log.d("Blackjack", "Split")
         //create a new hand with one of the card, deal a new card to each of those hands, and then continue with this hand
         //technically not the same card order but really doesnt matter
@@ -282,33 +305,45 @@ class PlayScreenActivity : AppCompatActivity(){
         if(activeHandIndex < hands.size){
             activateHand(hands[activeHandIndex])
         } else{
-            dealerTurn()
+            runBlocking{
+                dealerTurn()
+            }
+
         }
     }
 
-    private fun dealerTurn(){
+    suspend fun dealerTurn(){
+        Log.d("Blackjack", "Starting the dealers turn")
 
         if(hands.isEmpty()){
             gameOver()
             return
         }
 
-        while(dealer.value < 17 || dealer.value == 17 && dealer.aceCount > 0){
+        while(dealer.value < 17 || (dealer.value == 17 && dealer.aceCount > 0)){
             dealCard(dealer)
+            updateHand(dealer)
+            delay(1000)
         }
 
         if(dealer.value > 21){
+            DisplayToast("Dealer Bust!")
             for (hand in hands){
                 payoutHand(hand)
+                delay(2000)
             }
         }else{
             for (hand in hands){
                 if(dealer.value < hand.value){
                     payoutHand(hand)
                 }else if(dealer.value == hand.value){
+                    DisplayToast("Push!")
                     money += hand.bet
                     displayCurrentMoney()
+                }else{
+                    DisplayToast("Lose!")
                 }
+                delay(2000)
             }
         }
 
@@ -316,12 +351,14 @@ class PlayScreenActivity : AppCompatActivity(){
     }
 
     private fun payoutHand(handData: HandData){
+        DisplayToast("Win!")
         money += handData.bet * 2
         displayCurrentMoney()
     }
 
 
     private fun gameOver(){
+        Log.d("Blackjack", "Hand is over")
         returnToBetting()
     }
 
@@ -333,7 +370,21 @@ class PlayScreenActivity : AppCompatActivity(){
         button.text = "${String.format("%.0f", value)}"
     }
 
+    private fun DisplayToast(message: String){
+        val toast = Toast.makeText(this, message, Toast.LENGTH_SHORT)
+        toast.show()
 
+        runBlocking {
+            PauseInput(Toast.LENGTH_SHORT)
+        }
+
+    }
+
+    suspend fun PauseInput(delay: Int){
+        paused = true
+        delay(delay.toLong())
+        paused = false
+    }
 
 
     private fun returnToBetting(){
