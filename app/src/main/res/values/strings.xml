@@ -10,5 +10,8 @@
     <string name="blackjack_hand_bet">Bet: </string>
     <string name="btn_return">Return</string>
     <string name="blackjack_player_money">Money: 100</string>
-
+    <string name="blackjack_player_wins">Player wins!</string>
+    <string name="blackjack_player_ties">Player pushes.</string>
+    <string name="blackjack_player_payout">You win: $420.69</string>
+    <string name="blackjack_player_loses">Player loses.</string>
 </resources>
