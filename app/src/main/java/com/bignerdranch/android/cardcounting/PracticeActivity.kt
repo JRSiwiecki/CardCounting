@@ -148,6 +148,23 @@ class PracticeActivity: AppCompatActivity() {
 
         cardsShown += 1
 
+        //counter for correct answer
+        if(challengeType == ChallengeType.HARD) {
+            when (activeCard.rank.value) {
+                in 2..6 -> {
+                    correctFinalCount += 1
+                }
+
+                in 7..9 -> {
+                    correctFinalCount += 0
+                }
+
+                else -> {
+                    correctFinalCount -= 1
+                }
+            }
+        }
+
         // Update game progress
         val progressPercentage = (cardsShown.toDouble() / totalCardsInDeck) * 100
         if (progressPercentage >= 50) {
@@ -189,17 +206,17 @@ class PracticeActivity: AppCompatActivity() {
             in 2..6 -> {
                 userIsCorrect = (answer == 1)
                 correctAnswer = 1
-                correctFinalCount = correctFinalCount + 1
+                correctFinalCount += 1
             }
             in 7..9 -> {
                 userIsCorrect = (answer == 0)
                 correctAnswer = 0
-                correctFinalCount = correctFinalCount + 0
+                correctFinalCount += 0
             }
             else -> {
                 userIsCorrect = (answer == -1)
                 correctAnswer = -1
-                correctFinalCount = correctFinalCount - 1
+                correctFinalCount -= 1
             }
         }
 
@@ -311,6 +328,7 @@ class PracticeActivity: AppCompatActivity() {
             intent.putExtra("FINAL_SCORE", count)
             intent.putExtra("CORRECT_ANSWERS", cardsCorrect)
             intent.putExtra("CORRECT_COUNT", correctFinalCount)
+            intent.putExtra("CHALLENGE_TYPE", challengeType)
 
             startActivity(intent)
             finish()
