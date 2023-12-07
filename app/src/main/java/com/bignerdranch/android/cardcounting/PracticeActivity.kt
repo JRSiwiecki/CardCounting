@@ -51,7 +51,6 @@ class PracticeActivity: AppCompatActivity() {
         deck = Deck.Builder().build(numberOfDecks)
 
         totalCardsInDeck = numberOfDecks * 52
-        //val random = Random()
 
         cardView = findViewById(R.id.activecard)
 
