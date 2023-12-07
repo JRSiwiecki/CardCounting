@@ -147,7 +147,15 @@ class PracticeActivity: AppCompatActivity() {
 
         cardsShown += 1
 
-        //counter for correct answer
+        // Update game progress
+        // Ends game when reaching 50% of deck 
+        val progressPercentage = (cardsShown.toDouble() / totalCardsInDeck) * 100
+        if (progressPercentage >= 50) {
+            endPracticeSession()
+
+        }
+        
+        //counter for correct answer when hard mode
         if(challengeType == ChallengeType.HARD) {
             when (activeCard.rank.value) {
                 in 2..6 -> {
@@ -164,12 +172,7 @@ class PracticeActivity: AppCompatActivity() {
             }
         }
 
-        // Update game progress
-        val progressPercentage = (cardsShown.toDouble() / totalCardsInDeck) * 100
-        if (progressPercentage >= 50) {
-            endPracticeSession()
-
-        }
+        
     }
 
     /**
