@@ -84,6 +84,12 @@ class PracticeActivity: AppCompatActivity() {
             binding.nextCard.isEnabled = true
         }
 
+        // Don't allow for pressing nextCard button on normal or hard,
+        // just go to next card when user answers.
+        if (challengeType == ChallengeType.NORMAL || challengeType == ChallengeType.HARD) {
+            binding.nextCard.isVisible = false
+        }
+
         binding.nextCard.setOnClickListener {
             countdownTimer.cancel()
 
@@ -92,7 +98,7 @@ class PracticeActivity: AppCompatActivity() {
 
             // If on hard mode, don't display count buttons,
             // don't disable nextCard button.
-            if (challengeType != ChallengeType.HARD) {
+            if (challengeType == ChallengeType.EASY) {
                 resetCountButtons()
                 disableNextCardButton()
             }
@@ -226,7 +232,11 @@ class PracticeActivity: AppCompatActivity() {
             ChallengeType.NORMAL -> {
                 binding.timer.text = if (ranOutOfTime) "Time Over!" else "Answered!"
 
-                handleButtonsAndNextCard(0)
+                // Disable  nextCard button
+                binding.nextCard.isVisible = false
+                binding.nextCard.isEnabled = false
+
+                updatePracticeUI()
             }
 
             // If ChallengeType is HARD, do not allow user to use count buttons.
@@ -238,11 +248,11 @@ class PracticeActivity: AppCompatActivity() {
                 binding.nocount.isVisible = false
                 binding.minuscount.isVisible = false
 
-                // Enable and make nextCard button visible
-                binding.nextCard.isVisible = true
-                binding.nextCard.isEnabled = true
+                // Disable nextCard button
+                binding.nextCard.isVisible = false
+                binding.nextCard.isEnabled = false
 
-                handleButtonsAndNextCard(correctAnswer)
+                updatePracticeUI()
             }
         }
     }
@@ -254,6 +264,8 @@ class PracticeActivity: AppCompatActivity() {
      * @param correctAnswer Int. Represents the correctAnswer for the activeCard.
      */
     private fun handleButtonsAndNextCard(correctAnswer: Int) {
+        countdownTimer.cancel()
+
         // Disable count buttons
         binding.pluscount.isEnabled = false
         binding.nocount.isEnabled = false
@@ -341,5 +353,21 @@ class PracticeActivity: AppCompatActivity() {
             finish()
         }
 
+    }
+
+    private fun updatePracticeUI() {
+        countdownTimer.cancel()
+
+        updateActiveCard()
+        updateTexts()
+
+        // If on normal or hard mode, don't display count buttons,
+        // don't disable nextCard button.
+        if (challengeType == ChallengeType.EASY) {
+            resetCountButtons()
+            disableNextCardButton()
+        }
+
+        startCountdown(timePerCardMillis)
     }
 }
