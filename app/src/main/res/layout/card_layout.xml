@@ -1,0 +1,11 @@
+<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/cardImage"
+    android:layout_width="100dp"
+    android:layout_height="150dp"
+
+    android:layout_marginStart="5dp"
+
+    android:layout_marginTop="5dp"
+    android:background="#899350"
+    android:src="@drawable/card" />
+

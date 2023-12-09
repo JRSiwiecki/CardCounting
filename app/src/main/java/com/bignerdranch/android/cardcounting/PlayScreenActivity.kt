@@ -3,7 +3,9 @@ package com.bignerdranch.android.cardcounting
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -103,15 +105,24 @@ class PlayScreenActivity : AppCompatActivity(){
 
         dealCard(dealer)
 
+        //val cardStack = binding.dealerCardStack
+
+        // Example: Adding a card to the stack
+        //val cardLayout = LayoutInflater.from(this).inflate(R.layout.card_layout, null)
+        //cardStack.addView(cardLayout)
+
         for(hand in hands){
             dealCard(hand)
         }
 
         dealCard(dealer)
-
+        //cardStack.addView(cardLayout)
 
         //Pay out all blackjack players
-        for(hand in hands){
+        val iterator = hands.iterator()
+        //for(hand in hands){
+        while(iterator.hasNext()){
+            val hand = iterator.next()
             if(hand.value == 21){
                 if(dealer.value < 21){
                     DisplayToast("Blackjack!")
@@ -121,14 +132,21 @@ class PlayScreenActivity : AppCompatActivity(){
                     money += (hand.bet)
                     displayCurrentMoney()
                 }
-                clearHand(hand)
+                //clearHand(hand)
+                iterator.remove()
             }
+
         }
+
 
         if(dealer.value == 21){
             DisplayToast("Dealer Blackjack!")
-            for(hand in hands){
-                clearHand(hand)
+
+            val iterator = hands.iterator()
+            //for(hand in hands){
+            while(iterator.hasNext()){
+                iterator.remove()
+
             }
 
             //End game
@@ -290,12 +308,13 @@ class PlayScreenActivity : AppCompatActivity(){
 
     private fun clearHand(handData: HandData){
         //remove hand from table and list
-        hands.removeAt(activeHandIndex)
-        activeHandIndex --
+        hands.remove(handData)
+
     }
 
     private fun bustHand(handData: HandData){
-        clearHand(handData)
+        clearHand(hands[activeHandIndex])
+        activeHandIndex --
     }
 
     private fun endHand(handData: HandData){

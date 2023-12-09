@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:layout_margin="8dp"
     android:padding="8dp"
-    app:cardCornerRadius="8dp"
+    app:cardBackgroundColor="#505050"
+    app:cardCornerRadius="16dp"
     app:cardElevation="8dp"
     app:cardUseCompatPadding="true">
 
