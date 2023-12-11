@@ -3,13 +3,15 @@ package com.bignerdranch.android.cardcounting
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bignerdranch.android.cardcounting.databinding.ActivityBettingBinding
 import com.bignerdranch.android.cardcounting.databinding.ActivityPlayScreenBinding
+
 
 class PlayScreenActivity : AppCompatActivity(){
     private lateinit var binding: ActivityPlayScreenBinding
@@ -18,6 +20,9 @@ class PlayScreenActivity : AppCompatActivity(){
 
     private lateinit var dealerHandRecyclerView: RecyclerView
     private lateinit var playerHandRecyclerView: RecyclerView
+
+    private lateinit var dealerHandAdapter: PlayerHandAdapter
+    private lateinit var playerHandAdapter: PlayerHandAdapter
 
     private val playScreenViewModel: PlayScreenViewModel by viewModels()
 
@@ -58,11 +63,13 @@ class PlayScreenActivity : AppCompatActivity(){
             split()
         }
 
+        setUpHandViews()
         startBlackJack()
     }
 
     private fun startBlackJack(){
         playScreenViewModel.startBlackJack()
+        updateCardViews()
 
         //Pay out all blackjack players
         for(hand in playScreenViewModel.hands){
@@ -123,7 +130,10 @@ class PlayScreenActivity : AppCompatActivity(){
     private fun hit(){
         playScreenViewModel.hit()
         updateHand(playScreenViewModel.activeHand)
+        updateCardViews()
     }
+
+
 
     private fun stand(){
         Log.d(
@@ -223,7 +233,21 @@ class PlayScreenActivity : AppCompatActivity(){
         startActivity(intent)
     }
 
+    private fun setUpHandViews() {
+        TODO("This block of code has player_hand_recycler_view return null which causes an exception")
+        playerHandRecyclerView = findViewById(R.id.player_hand_recycler_view)
+        dealerHandRecyclerView = findViewById(R.id.dealer_hand_recycler_view)
+
+        playerHandRecyclerView.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        playerHandAdapter = PlayerHandAdapter(playScreenViewModel.activeHand.cardList)
+
+        dealerHandRecyclerView.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        dealerHandAdapter = PlayerHandAdapter(playScreenViewModel.dealer.cardList)
+    }
+
     private fun updateCardViews() {
-        
+        TODO("Not yet implemented")
     }
 }

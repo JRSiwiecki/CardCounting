@@ -14,6 +14,6 @@
     <string name="blackjack_player_ties">Player pushes.</string>
     <string name="blackjack_player_payout">You win: $420.69</string>
     <string name="blackjack_player_loses">Player loses.</string>
-    <string name="card_rank_symbol">2</string>
+    <string name="card_rank_symbol">10</string>
     <string name="card_suit_symbol">\u2660</string>
 </resources>

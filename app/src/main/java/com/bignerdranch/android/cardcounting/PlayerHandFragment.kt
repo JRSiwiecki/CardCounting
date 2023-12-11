@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bignerdranch.android.cardcounting.databinding.FragmentPlayerHandBinding
 
 class PlayerHandFragment : Fragment() {
@@ -21,6 +22,9 @@ class PlayerHandFragment : Fragment() {
     ): View? {
         _binding =
             FragmentPlayerHandBinding.inflate(layoutInflater, container, false)
+
+        binding.playerHandRecyclerView.layoutManager = LinearLayoutManager(context)
+
         return binding.root
     }
 

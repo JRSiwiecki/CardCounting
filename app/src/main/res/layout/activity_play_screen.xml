@@ -253,85 +253,15 @@
         android:weightSum="6"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <com.bignerdranch.android.cardcounting.CardView
-            android:id="@+id/cv_player1"
-            android:layout_width="96dp"
-            android:layout_height="128dp"
-            android:layout_marginStart="0dp"
-            android:layout_marginBottom="128dp"
-            android:scaleType="centerInside"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/player_hand_fragment_container"
+            android:name="com.bignerdranch.android.cardcounting.PlayerHandFragment"
+            android:layout_width="320dp"
+            android:layout_height="match_parent"
+            tools:context=".PlayScreenActivity"
+            tools:layout="@layout/fragment_player_hand" />
 
-        <com.bignerdranch.android.cardcounting.CardView
-            android:id="@+id/cv_player2"
-            android:layout_width="96dp"
-            android:layout_height="128dp"
-            android:layout_marginStart="-64dp"
-            android:layout_marginBottom="0dp"
-            android:scaleType="centerInside"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
 
-        <com.bignerdranch.android.cardcounting.CardView
-            android:id="@+id/cv_player3"
-            android:layout_width="96dp"
-            android:layout_height="128dp"
-            android:layout_marginStart="-64dp"
-            android:layout_marginBottom="0dp"
-            android:scaleType="centerInside"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <com.bignerdranch.android.cardcounting.CardView
-            android:id="@+id/cv_player4"
-            android:layout_width="96dp"
-            android:layout_height="128dp"
-            android:layout_marginStart="-64dp"
-            android:layout_marginBottom="0dp"
-            android:scaleType="centerInside"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <com.bignerdranch.android.cardcounting.CardView
-            android:id="@+id/cv_player5"
-            android:layout_width="96dp"
-            android:layout_height="128dp"
-            android:layout_marginStart="-64dp"
-            android:layout_marginBottom="0dp"
-            android:scaleType="centerInside"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <com.bignerdranch.android.cardcounting.CardView
-            android:id="@+id/cv_player6"
-            android:layout_width="96dp"
-            android:layout_height="128dp"
-            android:layout_marginStart="-64dp"
-            android:layout_marginBottom="0dp"
-            android:scaleType="centerInside"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <com.bignerdranch.android.cardcounting.CardView
-            android:id="@+id/cv_player7"
-            android:layout_width="96dp"
-            android:layout_height="128dp"
-            android:layout_marginStart="-64dp"
-            android:layout_marginBottom="0dp"
-            android:scaleType="centerInside"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <com.bignerdranch.android.cardcounting.CardView
-            android:id="@+id/cv_player8"
-            android:layout_width="96dp"
-            android:layout_height="128dp"
-            android:layout_marginStart="-64dp"
-            android:layout_marginBottom="0dp"
-            android:scaleType="centerInside"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
