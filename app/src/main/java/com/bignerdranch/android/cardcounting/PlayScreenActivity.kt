@@ -116,6 +116,7 @@ class PlayScreenActivity : AppCompatActivity(){
             }
         }
         Log.d("Blackjack", "The current hand value is:" + handData.value)
+        updateCardViews()
     }
 
     private fun toggleButton(button: Button, enabled: Boolean){
