@@ -3,7 +3,6 @@ package com.bignerdranch.android.cardcounting
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.activity.viewModels
@@ -39,14 +38,6 @@ class PlayScreenActivity : AppCompatActivity(){
         val betAmountsArray = intent.getFloatArrayExtra("betAmounts")
         playScreenViewModel.betAmounts = betAmountsArray?.toMutableList() ?: mutableListOf()
 
-
-        /*
-        dealerAdapter = CardAdapter(this, playScreenViewModel.dealer.cardList, isDealer = true)
-        binding.dealerHandRecyclerView.adapter = dealerAdapter
-
-        playerAdapter = CardAdapter(this, playScreenViewModel.activeHand.cardList, isDealer = false)
-        binding.playerHandRecyclerView.adapter = playerAdapter
-        */
 
         moneyTextView = binding.gameMoney
         // Now you can use 'money' and 'betAmounts' in your ActivityPlayScreen
@@ -261,7 +252,8 @@ class PlayScreenActivity : AppCompatActivity(){
     }
 
     private fun updateCardViews() {
-        dealerAdapter.notifyDataSetChanged()
-        playerAdapter.notifyDataSetChanged()
+        // Worst case scenario, go back to using .notifyDataSetChanged()
+        dealerAdapter.notifyItemInserted(dealerAdapter.itemCount)
+        playerAdapter.notifyItemInserted(playerAdapter.itemCount)
     }
 }
