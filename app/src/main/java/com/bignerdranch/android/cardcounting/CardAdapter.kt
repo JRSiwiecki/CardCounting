@@ -17,9 +17,9 @@ class CardAdapter(
 
         fun bind(card: Card) {
             // Customize this based on your CardView or layout structure
-            binding.rankSymbolTop.text = card.rank.toString()
-            binding.rankSymbolMiddle.text = card.rank.toString()
-            binding.rankSymbolBottom.text = card.rank.toString()
+            binding.rankSymbolTop.text = card.rank.symbol
+            binding.rankSymbolMiddle.text = card.rank.symbol
+            binding.rankSymbolBottom.text = card.rank.symbol
             binding.suitSymbolTop.text = card.suit.symbol.toString()
             binding.suitSymbolBottom.text = card.suit.symbol.toString()
         }
