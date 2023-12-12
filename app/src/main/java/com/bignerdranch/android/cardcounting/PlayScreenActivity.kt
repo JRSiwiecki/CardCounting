@@ -21,8 +21,8 @@ class PlayScreenActivity : AppCompatActivity(){
     private lateinit var dealerHandRecyclerView: RecyclerView
     private lateinit var playerHandRecyclerView: RecyclerView
 
-    private lateinit var dealerHandAdapter: PlayerHandAdapter
-    private lateinit var playerHandAdapter: PlayerHandAdapter
+    private lateinit var dealerAdapter: CardAdapter
+    private lateinit var playerAdapter: CardAdapter
 
     private val playScreenViewModel: PlayScreenViewModel by viewModels()
 
@@ -38,6 +38,15 @@ class PlayScreenActivity : AppCompatActivity(){
         playScreenViewModel.money = intent.getFloatExtra("money", 0f)
         val betAmountsArray = intent.getFloatArrayExtra("betAmounts")
         playScreenViewModel.betAmounts = betAmountsArray?.toMutableList() ?: mutableListOf()
+
+
+        /*
+        dealerAdapter = CardAdapter(this, playScreenViewModel.dealer.cardList, isDealer = true)
+        binding.dealerHandRecyclerView.adapter = dealerAdapter
+
+        playerAdapter = CardAdapter(this, playScreenViewModel.activeHand.cardList, isDealer = false)
+        binding.playerHandRecyclerView.adapter = playerAdapter
+        */
 
         moneyTextView = binding.gameMoney
         // Now you can use 'money' and 'betAmounts' in your ActivityPlayScreen
@@ -63,13 +72,13 @@ class PlayScreenActivity : AppCompatActivity(){
             split()
         }
 
-        setUpHandViews()
         startBlackJack()
+        setUpHandViews()
+        updateCardViews()
     }
 
     private fun startBlackJack(){
         playScreenViewModel.startBlackJack()
-        updateCardViews()
 
         //Pay out all blackjack players
         for(hand in playScreenViewModel.hands){
@@ -234,20 +243,25 @@ class PlayScreenActivity : AppCompatActivity(){
     }
 
     private fun setUpHandViews() {
-        TODO("This block of code has player_hand_recycler_view return null which causes an exception")
-        playerHandRecyclerView = findViewById(R.id.player_hand_recycler_view)
-        dealerHandRecyclerView = findViewById(R.id.dealer_hand_recycler_view)
-
-        playerHandRecyclerView.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        playerHandAdapter = PlayerHandAdapter(playScreenViewModel.activeHand.cardList)
+        dealerHandRecyclerView = findViewById(R.id.dealerHandRecyclerView)
+        playerHandRecyclerView = findViewById(R.id.playerHandRecyclerView)
 
         dealerHandRecyclerView.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        dealerHandAdapter = PlayerHandAdapter(playScreenViewModel.dealer.cardList)
+
+        playerHandRecyclerView.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+
+        // Initialize adapters for both dealer and player
+        dealerAdapter = CardAdapter(this, playScreenViewModel.dealer.cardList, isDealer = true)
+        dealerHandRecyclerView.adapter = dealerAdapter
+
+        playerAdapter = CardAdapter(this, playScreenViewModel.activeHand.cardList, isDealer = false)
+        playerHandRecyclerView.adapter = playerAdapter
     }
 
     private fun updateCardViews() {
-        TODO("Not yet implemented")
+        dealerAdapter.notifyDataSetChanged()
+        playerAdapter.notifyDataSetChanged()
     }
 }
