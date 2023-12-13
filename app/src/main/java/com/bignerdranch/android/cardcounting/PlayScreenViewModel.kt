@@ -160,6 +160,10 @@ class PlayScreenViewModel : ViewModel() {
         //remove hand from table and list
         hands.removeAt(activeHandIndex)
         activeHandIndex--
+
+        if (activeHandIndex < 0){
+            activeHandIndex = 0
+        }
     }
 
     fun bustHand(handData: HandData){
@@ -170,12 +174,15 @@ class PlayScreenViewModel : ViewModel() {
         //if theres another hand    activate the next hand
         //else dealer's turn
         activeHandIndex++
-        if(activeHandIndex < hands.size){
+
+        return if(activeHandIndex < hands.size){
             activateHand(hands[activeHandIndex])
-        } else{
-            return true
+            false
+        } else {
+
+            activeHandIndex = 0
+            true
         }
-        return false
     }
 
 }

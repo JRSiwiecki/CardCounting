@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.activity.viewModels
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -88,23 +89,10 @@ class PlayScreenActivity : AppCompatActivity(){
         }
     }
 
-    private fun activateHand(handData: HandData){
-        playScreenViewModel.activateHand(handData)
-
-        toggleButton(binding.hit, true)
-        toggleButton(binding.stay, true)
-
-        if(playScreenViewModel.money >= handData.bet) {
-            toggleButton(binding.doubleDown, true)
-        } else{
-            toggleButton(binding.doubleDown, false)
-        }
-
-        Log.d("Blackjack", "The starting hand value is:" + handData.value)
-    }
-
     private fun updateHand(handData: HandData){
         toggleButton(binding.doubleDown, false)
+
+        updateCardViews()
 
         if(handData.value > 21){
             if(handData.aceCount > 0){
@@ -118,7 +106,6 @@ class PlayScreenActivity : AppCompatActivity(){
             }
         }
         Log.d("Blackjack", "The current hand value is:" + handData.value)
-        updateCardViews()
     }
 
     private fun toggleButton(button: Button, enabled: Boolean){
@@ -132,11 +119,9 @@ class PlayScreenActivity : AppCompatActivity(){
 
     private fun hit(){
         playScreenViewModel.hit()
-        updateHand(playScreenViewModel.activeHand)
-        updateCardViews()
+
+        updateHand(playScreenViewModel.hands[playScreenViewModel.activeHandIndex])
     }
-
-
 
     private fun stand(){
         Log.d(
@@ -144,6 +129,8 @@ class PlayScreenActivity : AppCompatActivity(){
             "Standing at: "
                     + playScreenViewModel.hands[playScreenViewModel.activeHandIndex].value)
         endHand(playScreenViewModel.activeHand)
+
+        updateHand(playScreenViewModel.hands[playScreenViewModel.activeHandIndex])
     }
 
     private fun double(){
@@ -159,12 +146,17 @@ class PlayScreenActivity : AppCompatActivity(){
 
     private fun bustHand(handData: HandData){
         playScreenViewModel.clearHand(handData)
+
+        updateHand(playScreenViewModel.hands[playScreenViewModel.activeHandIndex])
     }
 
     private fun endHand(handData: HandData){
         //if theres another hand    activate the next hand
         //else dealer's turn
         val endPlayerTurn = playScreenViewModel.endHand(handData)
+
+        updateHand(playScreenViewModel.hands[playScreenViewModel.activeHandIndex])
+
         if (endPlayerTurn) {
             runBlocking {
                 dealerTurn()
@@ -185,6 +177,8 @@ class PlayScreenActivity : AppCompatActivity(){
                 playScreenViewModel.dealer.aceCount > 0)) {
             playScreenViewModel.dealCard(playScreenViewModel.dealer)
         }
+
+        updateDealerCards()
 
         if(playScreenViewModel.dealer.value > 21){
             for (hand in playScreenViewModel.hands){
@@ -217,7 +211,6 @@ class PlayScreenActivity : AppCompatActivity(){
         displayToast("Win!")
         displayCurrentMoney()
     }
-
 
     private fun gameOver(){
         Log.d("Blackjack", "Hand is over")
@@ -298,26 +291,38 @@ class PlayScreenActivity : AppCompatActivity(){
         }
     }
 
-    private fun updateCardViews() {
+    private fun updateDealerCards() {
         // Worst case scenario, go back to using .notifyDataSetChanged()
         dealerAdapter.notifyItemInserted(dealerAdapter.itemCount)
+    }
 
+    private fun updateCardViews() {
+        updateHandColors()
 
-        when (playScreenViewModel.betAmounts.size) {
-            1 -> {
-                playerAdapterBottom.notifyItemInserted(playScreenViewModel.hands[0].cardList.size - 1)
-            }
+        playerAdapterBottom.notifyDataSetChanged()
 
-            2 -> {
-                playerAdapterBottom.notifyItemInserted(playScreenViewModel.hands[0].cardList.size - 1)
-                playerAdapterMiddle.notifyItemInserted(playScreenViewModel.hands[1].cardList.size - 1)
-            }
+        if (playScreenViewModel.betAmounts.size >= 2) {
+            playerAdapterMiddle.notifyDataSetChanged()
+        }
 
-            3 -> {
-                playerAdapterBottom.notifyItemInserted(playScreenViewModel.hands[0].cardList.size - 1)
-                playerAdapterMiddle.notifyItemInserted(playScreenViewModel.hands[1].cardList.size - 1)
-                playerAdapterTop.notifyItemInserted(playScreenViewModel.hands[2].cardList.size - 1)
-            }
+        if (playScreenViewModel.betAmounts.size >= 3) {
+            playerAdapterTop.notifyDataSetChanged()
+        }
+    }
+
+    private fun updateHandColors() {
+        playerHandRecyclerViewBottom.setBackgroundColor(getBackgroundColor(0))
+        playerHandRecyclerViewMiddle.setBackgroundColor(getBackgroundColor(1))
+        playerHandRecyclerViewTop.setBackgroundColor(getBackgroundColor(2))
+    }
+
+    private fun getBackgroundColor(handIndex: Int): Int {
+        return if (handIndex == playScreenViewModel.activeHandIndex) {
+            // Use the highlighted color for the active hand
+            ContextCompat.getColor(this, R.color.green)
+        } else {
+            // Use the default background color for non-active hands
+            ContextCompat.getColor(this, android.R.color.transparent)
         }
     }
 }
