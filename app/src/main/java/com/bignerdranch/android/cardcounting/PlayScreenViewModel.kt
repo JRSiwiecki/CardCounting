@@ -78,24 +78,6 @@ class PlayScreenViewModel : ViewModel() {
 
     private fun activateHand(handData: HandData){
         activeHand = handData
-        activeHand =
-            hands[activeHandIndex]
-    }
-
-    private fun recalculateHandValue(handData: HandData){
-        handData.value = 0
-        handData.aceCount = 0
-        for(card in handData.cardList){
-            handData.value += card.rank.value
-            if(card.rank.value == 11){
-                handData.aceCount ++
-            }
-
-            if(handData.value > 21 && handData.aceCount > 0){
-                handData.value -= 10
-                handData.aceCount --
-            }
-        }
     }
 
     fun hit(){
