@@ -10,11 +10,14 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bignerdranch.android.cardcounting.databinding.ActivityPlayScreenBinding
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class PlayScreenActivity : AppCompatActivity(){
@@ -158,7 +161,7 @@ class PlayScreenActivity : AppCompatActivity(){
         updateHand(playScreenViewModel.hands[playScreenViewModel.activeHandIndex])
 
         if (endPlayerTurn) {
-            runBlocking {
+            lifecycleScope.launch {
                 dealerTurn()
             }
         }
@@ -178,7 +181,9 @@ class PlayScreenActivity : AppCompatActivity(){
             playScreenViewModel.dealCard(playScreenViewModel.dealer)
         }
 
-        updateDealerCards()
+        withContext(Dispatchers.Main) {
+            updateDealerCards()
+        }
 
         if(playScreenViewModel.dealer.value > 21){
             for (hand in playScreenViewModel.hands){
@@ -225,7 +230,7 @@ class PlayScreenActivity : AppCompatActivity(){
         val toast = Toast.makeText(this, message, Toast.LENGTH_SHORT)
         toast.show()
 
-        runBlocking {
+        lifecycleScope.launch {
             pauseInput(Toast.LENGTH_SHORT)
         }
 
@@ -292,8 +297,7 @@ class PlayScreenActivity : AppCompatActivity(){
     }
 
     private fun updateDealerCards() {
-        // Worst case scenario, go back to using .notifyDataSetChanged()
-        dealerAdapter.notifyItemInserted(dealerAdapter.itemCount)
+        dealerAdapter.notifyDataSetChanged()
     }
 
     private fun updateCardViews() {
