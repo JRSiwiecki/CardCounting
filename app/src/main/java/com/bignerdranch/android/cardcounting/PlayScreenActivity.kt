@@ -150,7 +150,13 @@ class PlayScreenActivity : AppCompatActivity(){
     private fun bustHand(){
         playScreenViewModel.clearHand()
 
-        updateHand(playScreenViewModel.hands[playScreenViewModel.activeHandIndex])
+        if (playScreenViewModel.activeHandIndex < playScreenViewModel.hands.size) {
+            updateHand(playScreenViewModel.hands[playScreenViewModel.activeHandIndex])
+        } else {
+            Log.d("BJ", "LEAVE")
+            gameOver()
+        }
+
     }
 
     private fun endHand() {
@@ -158,7 +164,7 @@ class PlayScreenActivity : AppCompatActivity(){
         //else dealer's turn
         val endPlayerTurn = playScreenViewModel.endHand()
 
-        updateHand(playScreenViewModel.hands[playScreenViewModel.activeHandIndex])
+        // updateHand(playScreenViewModel.hands[playScreenViewModel.activeHandIndex])
 
         if (endPlayerTurn) {
             lifecycleScope.launch {
@@ -247,6 +253,9 @@ class PlayScreenActivity : AppCompatActivity(){
 
         // Pass the necessary data to the next activity
         intent.putExtra("money", playScreenViewModel.money)
+
+        // End this activity to prevent crashes
+        finish()
 
         // Start the next activity
         startActivity(intent)
