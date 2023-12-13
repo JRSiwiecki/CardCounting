@@ -270,7 +270,7 @@ class PlayScreenActivity : AppCompatActivity(){
 
     private fun setUpHandViews() {
         dealerHandRecyclerView = findViewById(R.id.dealerHandRecyclerView)
-        playerHandRecyclerView = findViewById(R.id.playerHandRecyclerView)
+        playerHandRecyclerView = findViewById(R.id.playerHandRecyclerViewBottom)
 
         dealerHandRecyclerView.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
