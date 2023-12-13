@@ -21,8 +21,12 @@ class PlayScreenActivity : AppCompatActivity(){
     private lateinit var moneyTextView: TextView
 
     private lateinit var dealerHandRecyclerView: RecyclerView
-    private lateinit var playerHandRecyclerView: RecyclerView
+    private lateinit var playerHandRecyclerViewBottom: RecyclerView
     private var paused: Boolean = false
+
+    // Extra player hands
+    private lateinit var playerHandRecyclerViewMiddle: RecyclerView
+    private lateinit var playerHandRecyclerViewTop: RecyclerView
 
     private lateinit var dealerAdapter: CardAdapter
     private lateinit var playerAdapter: CardAdapter
@@ -246,13 +250,14 @@ class PlayScreenActivity : AppCompatActivity(){
     }
 
     private fun setUpHandViews() {
+        // Set up main dealer and player hands
         dealerHandRecyclerView = findViewById(R.id.dealerHandRecyclerView)
-        playerHandRecyclerView = findViewById(R.id.playerHandRecyclerViewBottom)
+        playerHandRecyclerViewBottom = findViewById(R.id.playerHandRecyclerViewBottom)
 
         dealerHandRecyclerView.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
-        playerHandRecyclerView.layoutManager =
+        playerHandRecyclerViewBottom.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
         // Initialize adapters for both dealer and player
@@ -260,7 +265,10 @@ class PlayScreenActivity : AppCompatActivity(){
         dealerHandRecyclerView.adapter = dealerAdapter
 
         playerAdapter = CardAdapter(this, playScreenViewModel.activeHand.cardList, isDealer = false)
-        playerHandRecyclerView.adapter = playerAdapter
+        playerHandRecyclerViewBottom.adapter = playerAdapter
+
+        // Set up extra player hands
+
     }
 
     private fun updateCardViews() {
