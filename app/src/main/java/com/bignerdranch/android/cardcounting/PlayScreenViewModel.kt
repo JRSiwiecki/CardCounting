@@ -38,12 +38,14 @@ class PlayScreenViewModel : ViewModel() {
 
         dealer = HandData(bet = 0f)
 
+        // Deal first set of cards (1st to each player)
         for(hand in hands){
             dealCard(hand)
         }
 
         dealCard(dealer)
 
+        // Deal second set of cards (2nd to each player)
         for(hand in hands){
             dealCard(hand)
         }
