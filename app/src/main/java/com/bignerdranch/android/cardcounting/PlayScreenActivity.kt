@@ -224,12 +224,12 @@ class PlayScreenActivity : AppCompatActivity(){
         toast.show()
 
         runBlocking {
-            PauseInput(Toast.LENGTH_SHORT)
+            pauseInput(Toast.LENGTH_SHORT)
         }
 
     }
 
-    suspend fun PauseInput(delay: Int){
+    private suspend fun pauseInput(delay: Int){
         paused = true
         delay(delay.toLong())
         paused = false
