@@ -63,10 +63,6 @@ class PlayScreenActivity : AppCompatActivity(){
             double()
         }
 
-        binding.split.setOnClickListener {
-            split()
-        }
-
         startBlackJack()
         setUpHandViews()
         updateCardViews()
@@ -95,19 +91,11 @@ class PlayScreenActivity : AppCompatActivity(){
             toggleButton(binding.doubleDown, false)
         }
 
-        if(handData.cardList[0].rank == handData.cardList[1].rank
-                && playScreenViewModel.money >= handData.bet) {
-            toggleButton(binding.split, true)
-        } else {
-            toggleButton(binding.split, false)
-        }
-
         Log.d("Blackjack", "The starting hand value is:" + handData.value)
     }
 
     private fun updateHand(handData: HandData){
         toggleButton(binding.doubleDown, false)
-        toggleButton(binding.split, false)
 
         if(handData.value > 21){
             if(handData.aceCount > 0){
@@ -158,17 +146,6 @@ class PlayScreenActivity : AppCompatActivity(){
         displayCurrentMoney()
 
         updateHand(playScreenViewModel.hands[playScreenViewModel.activeHandIndex])
-    }
-
-    private fun split(){
-        playScreenViewModel.split()
-
-        activateHand(playScreenViewModel.hands[playScreenViewModel.activeHandIndex])
-
-        displayCurrentMoney()
-
-        updateHand(playScreenViewModel.hands[playScreenViewModel.activeHandIndex])
-        updateHand(playScreenViewModel.hands[playScreenViewModel.activeHandIndex + 1])
     }
 
     private fun bustHand(handData: HandData){
