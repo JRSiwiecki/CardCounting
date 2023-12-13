@@ -104,7 +104,7 @@ class PlayScreenActivity : AppCompatActivity(){
             } else{
                 bustHand(handData)
                 endHand(handData)
-                DisplayToast("Bust!")
+                displayToast("Bust!")
                 Log.d("Blackjack", "Bust")
             }
         }
@@ -163,7 +163,7 @@ class PlayScreenActivity : AppCompatActivity(){
         }
     }
 
-    suspend fun dealerTurn(){
+    private suspend fun dealerTurn(){
         Log.d("Blackjack", "Starting the dealers turn")
 
         if(playScreenViewModel.hands.isEmpty()){
@@ -190,11 +190,11 @@ class PlayScreenActivity : AppCompatActivity(){
                 
               } else if(playScreenViewModel.dealer.value == hand.value) {
                     playScreenViewModel.money += hand.bet
-                    DisplayToast("Push!")
+                  displayToast("Push!")
 
                     displayCurrentMoney()
               } else {
-                    DisplayToast("Lose!")
+                  displayToast("Lose!")
               }
                 delay(2000)
             }
@@ -205,7 +205,7 @@ class PlayScreenActivity : AppCompatActivity(){
 
     private fun payoutHand(handData: HandData){
         playScreenViewModel.money += handData.bet * 2
-        DisplayToast("Win!")
+        displayToast("Win!")
         displayCurrentMoney()
     }
 
@@ -219,7 +219,7 @@ class PlayScreenActivity : AppCompatActivity(){
         moneyTextView.text = "Money: $${String.format("%.2f", playScreenViewModel.money)}"
     }
 
-    private fun DisplayToast(message: String){
+    private fun displayToast(message: String){
         val toast = Toast.makeText(this, message, Toast.LENGTH_SHORT)
         toast.show()
 
