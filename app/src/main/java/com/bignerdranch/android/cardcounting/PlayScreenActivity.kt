@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.activity.viewModels
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bignerdranch.android.cardcounting.databinding.ActivityPlayScreenBinding
@@ -29,7 +30,9 @@ class PlayScreenActivity : AppCompatActivity(){
     private lateinit var playerHandRecyclerViewTop: RecyclerView
 
     private lateinit var dealerAdapter: CardAdapter
-    private lateinit var playerAdapter: CardAdapter
+    private lateinit var playerAdapterBottom: CardAdapter
+    private lateinit var playerAdapterMiddle: CardAdapter
+    private lateinit var playerAdapterTop: CardAdapter
 
     private val playScreenViewModel: PlayScreenViewModel by viewModels()
 
@@ -264,16 +267,55 @@ class PlayScreenActivity : AppCompatActivity(){
         dealerAdapter = CardAdapter(this, playScreenViewModel.dealer.cardList, isDealer = true)
         dealerHandRecyclerView.adapter = dealerAdapter
 
-        playerAdapter = CardAdapter(this, playScreenViewModel.activeHand.cardList, isDealer = false)
-        playerHandRecyclerViewBottom.adapter = playerAdapter
+        playerAdapterBottom = CardAdapter(this, playScreenViewModel.activeHand.cardList, isDealer = false)
+        playerHandRecyclerViewBottom.adapter = playerAdapterBottom
 
-        // Set up extra player hands
+        // Set up extra player hands if needed
+        playerHandRecyclerViewMiddle = findViewById(R.id.playerHandRecyclerViewMiddle)
+        playerHandRecyclerViewTop = findViewById(R.id.playerHandRecyclerViewTop)
 
+        when (playScreenViewModel.betAmounts.size) {
+            2 -> {
+                playerAdapterMiddle = CardAdapter(this, playScreenViewModel.activeHand.cardList, isDealer = false)
+                playerHandRecyclerViewMiddle.adapter = playerAdapterMiddle
+
+                playerHandRecyclerViewMiddle.isVisible = true
+            }
+
+            3 -> {
+                playerAdapterMiddle = CardAdapter(this, playScreenViewModel.activeHand.cardList, isDealer = false)
+                playerHandRecyclerViewMiddle.adapter = playerAdapterMiddle
+
+                playerHandRecyclerViewMiddle.isVisible = true
+
+                playerAdapterTop = CardAdapter(this, playScreenViewModel.activeHand.cardList, isDealer = false)
+                playerHandRecyclerViewTop.adapter = playerAdapterTop
+
+                playerHandRecyclerViewTop.isVisible = true
+            }
+        }
     }
 
     private fun updateCardViews() {
         // Worst case scenario, go back to using .notifyDataSetChanged()
         dealerAdapter.notifyItemInserted(dealerAdapter.itemCount)
-        playerAdapter.notifyItemInserted(playerAdapter.itemCount)
+
+
+        when (playScreenViewModel.betAmounts.size) {
+            1 -> {
+                playerAdapterBottom.notifyItemInserted(playerAdapterBottom.itemCount)
+            }
+
+            2 -> {
+                playerAdapterBottom.notifyItemInserted(playerAdapterBottom.itemCount)
+                playerAdapterMiddle.notifyItemInserted(playerAdapterMiddle.itemCount)
+            }
+
+            3 -> {
+                playerAdapterBottom.notifyItemInserted(playerAdapterBottom.itemCount)
+                playerAdapterMiddle.notifyItemInserted(playerAdapterMiddle.itemCount)
+                playerAdapterTop.notifyItemInserted(playerAdapterTop.itemCount)
+            }
+        }
     }
 }
