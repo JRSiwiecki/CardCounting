@@ -99,8 +99,8 @@ class PlayScreenActivity : AppCompatActivity(){
                 handData.value -= 10
                 handData.aceCount -= 1
             } else{
-                bustHand(handData)
-                endHand(handData)
+                bustHand()
+                endHand()
                 displayToast("Bust!")
                 Log.d("Blackjack", "Bust")
             }
@@ -128,7 +128,7 @@ class PlayScreenActivity : AppCompatActivity(){
             "Blackjack",
             "Standing at: "
                     + playScreenViewModel.hands[playScreenViewModel.activeHandIndex].value)
-        endHand(playScreenViewModel.activeHand)
+        endHand()
 
         updateHand(playScreenViewModel.hands[playScreenViewModel.activeHandIndex])
     }
@@ -144,16 +144,16 @@ class PlayScreenActivity : AppCompatActivity(){
         updateHand(playScreenViewModel.hands[playScreenViewModel.activeHandIndex])
     }
 
-    private fun bustHand(handData: HandData){
-        playScreenViewModel.clearHand(handData)
+    private fun bustHand(){
+        playScreenViewModel.clearHand()
 
         updateHand(playScreenViewModel.hands[playScreenViewModel.activeHandIndex])
     }
 
-    private fun endHand(handData: HandData){
+    private fun endHand() {
         //if theres another hand    activate the next hand
         //else dealer's turn
-        val endPlayerTurn = playScreenViewModel.endHand(handData)
+        val endPlayerTurn = playScreenViewModel.endHand()
 
         updateHand(playScreenViewModel.hands[playScreenViewModel.activeHandIndex])
 

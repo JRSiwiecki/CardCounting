@@ -63,7 +63,7 @@ class PlayScreenViewModel : ViewModel() {
         }
 
         if(dealer.value == 21){
-            for(hand in hands){
+            for (hand in hands){
                 //clearHand(hand)
             }
 
@@ -76,13 +76,13 @@ class PlayScreenViewModel : ViewModel() {
 
     }
 
-    fun activateHand(handData: HandData){
+    private fun activateHand(handData: HandData){
         activeHand = handData
         activeHand =
             hands[activeHandIndex]
     }
 
-    fun recalculateHandValue(handData: HandData){
+    private fun recalculateHandValue(handData: HandData){
         handData.value = 0
         handData.aceCount = 0
         for(card in handData.cardList){
@@ -156,7 +156,7 @@ class PlayScreenViewModel : ViewModel() {
         )
     }
 
-    fun clearHand(handData: HandData){
+    fun clearHand() {
         //remove hand from table and list
         hands.removeAt(activeHandIndex)
         activeHandIndex--
@@ -166,11 +166,7 @@ class PlayScreenViewModel : ViewModel() {
         }
     }
 
-    fun bustHand(handData: HandData){
-        clearHand(handData)
-    }
-
-    fun endHand(handData: HandData) : Boolean{
+    fun endHand(): Boolean {
         //if theres another hand    activate the next hand
         //else dealer's turn
         activeHandIndex++
