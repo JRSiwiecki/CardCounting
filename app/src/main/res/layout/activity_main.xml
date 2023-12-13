@@ -19,24 +19,24 @@
 		app:layout_constraintTop_toTopOf="parent" />
 
 	<Button
-		android:id="@+id/start_game_button"
+		android:id="@+id/start_blackjack_button"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_marginTop="124dp"
-		android:text="Start Game"
+		android:text="BlackJack"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@+id/textView" />
 
 	<Button
-		android:id="@+id/start_blackjack_button"
+		android:id="@+id/practice_button"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_marginTop="36dp"
-		android:text="BlackJack"
+		android:text="Practice"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@+id/instructions_button" />
+		app:layout_constraintTop_toBottomOf="@+id/start_blackjack_button" />
 
 	<Button
 		android:id="@+id/instructions_button"
@@ -47,6 +47,6 @@
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintHorizontal_bias="0.498"
 		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@+id/start_game_button" />
+		app:layout_constraintTop_toBottomOf="@+id/practice_button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

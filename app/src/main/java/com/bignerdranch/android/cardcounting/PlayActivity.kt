@@ -1,6 +1,7 @@
 package com.bignerdranch.android.cardcounting
 
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -107,11 +108,14 @@ class PlayActivity : AppCompatActivity() {
     }
 
     private fun setActiveButtonColor() {
-        activeButton.setBackgroundColor(0xFF00FF00.toInt()) // Green color in hexadecimal
+        // Set your desired color for green background tint
+        activeButton.backgroundTintList = ColorStateList.valueOf(0xFF00FF00.toInt())
     }
 
     private fun resetActiveButtonColor() {
-        activeButton.setBackgroundColor(0xFFCCCCCC.toInt()) // Your default color in hexadecimal
+        // Set your desired color for red background tint
+        activeButton.backgroundTintList = ColorStateList.valueOf(0xFFFF0000.toInt())
+
     }
 
     private fun lockInBet(){

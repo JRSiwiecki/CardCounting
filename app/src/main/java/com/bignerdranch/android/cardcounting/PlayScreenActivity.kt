@@ -6,10 +6,13 @@ import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import androidx.activity.viewModels
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bignerdranch.android.cardcounting.databinding.ActivityPlayScreenBinding
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 
 
 class PlayScreenActivity : AppCompatActivity(){
@@ -19,6 +22,7 @@ class PlayScreenActivity : AppCompatActivity(){
 
     private lateinit var dealerHandRecyclerView: RecyclerView
     private lateinit var playerHandRecyclerView: RecyclerView
+    private var paused: Boolean = false
 
     private lateinit var dealerAdapter: CardAdapter
     private lateinit var playerAdapter: CardAdapter
@@ -108,10 +112,11 @@ class PlayScreenActivity : AppCompatActivity(){
         if(handData.value > 21){
             if(handData.aceCount > 0){
                 handData.value -= 10
-                handData.aceCount += 10
+                handData.aceCount -= 1
             } else{
                 bustHand(handData)
                 endHand(handData)
+                DisplayToast("Bust!")
                 Log.d("Blackjack", "Bust")
             }
         }
@@ -179,7 +184,8 @@ class PlayScreenActivity : AppCompatActivity(){
         }
     }
 
-    private fun dealerTurn(){
+    suspend fun dealerTurn(){
+        Log.d("Blackjack", "Starting the dealers turn")
 
         if(playScreenViewModel.hands.isEmpty()){
             gameOver()
@@ -187,23 +193,31 @@ class PlayScreenActivity : AppCompatActivity(){
         }
 
         while(playScreenViewModel.dealer.value < 17
-                || playScreenViewModel.dealer.value == 17 &&
-                playScreenViewModel.dealer.aceCount > 0){
+                || (playScreenViewModel.dealer.value == 17 &&
+                playScreenViewModel.dealer.aceCount > 0)) {
             playScreenViewModel.dealCard(playScreenViewModel.dealer)
         }
 
         if(playScreenViewModel.dealer.value > 21){
             for (hand in playScreenViewModel.hands){
                 payoutHand(hand)
+                delay(2000)
             }
         }else{
             for (hand in playScreenViewModel.hands){
-                if(playScreenViewModel.dealer.value < hand.value){
+                
+              if(playScreenViewModel.dealer.value < hand.value) {
                     payoutHand(hand)
-                }else if(playScreenViewModel.dealer.value == hand.value){
+                
+              } else if(playScreenViewModel.dealer.value == hand.value) {
                     playScreenViewModel.money += hand.bet
+                    DisplayToast("Push!")
+
                     displayCurrentMoney()
-                }
+              } else {
+                    DisplayToast("Lose!")
+              }
+                delay(2000)
             }
         }
 
@@ -212,11 +226,13 @@ class PlayScreenActivity : AppCompatActivity(){
 
     private fun payoutHand(handData: HandData){
         playScreenViewModel.money += handData.bet * 2
+        DisplayToast("Win!")
         displayCurrentMoney()
     }
 
 
     private fun gameOver(){
+        Log.d("Blackjack", "Hand is over")
         returnToBetting()
     }
 
@@ -224,6 +240,22 @@ class PlayScreenActivity : AppCompatActivity(){
         moneyTextView.text = "Money: $${String.format("%.2f", playScreenViewModel.money)}"
     }
 
+    private fun DisplayToast(message: String){
+        val toast = Toast.makeText(this, message, Toast.LENGTH_SHORT)
+        toast.show()
+
+        runBlocking {
+            PauseInput(Toast.LENGTH_SHORT)
+        }
+
+    }
+
+    suspend fun PauseInput(delay: Int){
+        paused = true
+        delay(delay.toLong())
+        paused = false
+    }
+    
     private fun returnToBetting(){
         val intent = Intent(this, PlayActivity::class.java)
 
