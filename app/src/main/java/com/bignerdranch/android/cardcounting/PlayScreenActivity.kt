@@ -21,18 +21,20 @@ class PlayScreenActivity : AppCompatActivity(){
 
     private lateinit var moneyTextView: TextView
 
-    private lateinit var dealerHandRecyclerView: RecyclerView
-    private lateinit var playerHandRecyclerViewBottom: RecyclerView
     private var paused: Boolean = false
 
-    // Extra player hands
+    // Player hands
+    private lateinit var playerHandRecyclerViewBottom: RecyclerView
     private lateinit var playerHandRecyclerViewMiddle: RecyclerView
     private lateinit var playerHandRecyclerViewTop: RecyclerView
 
-    private lateinit var dealerAdapter: CardAdapter
     private lateinit var playerAdapterBottom: CardAdapter
     private lateinit var playerAdapterMiddle: CardAdapter
     private lateinit var playerAdapterTop: CardAdapter
+
+    // Dealer hands
+    private lateinit var dealerHandRecyclerView: RecyclerView
+    private lateinit var dealerAdapter: CardAdapter
 
     private val playScreenViewModel: PlayScreenViewModel by viewModels()
 
