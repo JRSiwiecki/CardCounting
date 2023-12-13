@@ -37,7 +37,7 @@
         android:text="@string/blackjack_dealer_desc"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dealer_layout" />
+        app:layout_constraintTop_toBottomOf="@+id/dealerHandRecyclerView" />
 
 
     <LinearLayout
@@ -115,105 +115,6 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/dealer_layout"
-        android:layout_width="match_parent"
-        android:layout_height="128dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="96dp"
-        android:orientation="horizontal"
-        android:weightSum="6"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <com.bignerdranch.android.cardcounting.CardView
-            android:id="@+id/cv_dealer1"
-            android:layout_width="96dp"
-            android:layout_height="128dp"
-            android:layout_marginStart="0dp"
-            android:layout_marginBottom="128dp"
-            android:scaleType="centerInside"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <com.bignerdranch.android.cardcounting.CardView
-            android:id="@+id/cv_dealer2"
-            android:layout_width="96dp"
-            android:layout_height="128dp"
-            android:layout_marginStart="-64dp"
-            android:layout_marginBottom="0dp"
-            android:scaleType="centerInside"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <com.bignerdranch.android.cardcounting.CardView
-            android:id="@+id/cv_dealer3"
-            android:layout_width="96dp"
-            android:layout_height="128dp"
-            android:layout_marginStart="-64dp"
-            android:layout_marginBottom="0dp"
-            android:scaleType="centerInside"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <com.bignerdranch.android.cardcounting.CardView
-            android:id="@+id/cv_dealer4"
-            android:layout_width="96dp"
-            android:layout_height="128dp"
-            android:layout_marginStart="-64dp"
-            android:layout_marginBottom="0dp"
-            android:scaleType="centerInside"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <com.bignerdranch.android.cardcounting.CardView
-            android:id="@+id/cv_dealer5"
-            android:layout_width="96dp"
-            android:layout_height="128dp"
-            android:layout_marginStart="-64dp"
-            android:layout_marginBottom="0dp"
-            android:scaleType="centerInside"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <com.bignerdranch.android.cardcounting.CardView
-            android:id="@+id/cv_dealer6"
-            android:layout_width="96dp"
-            android:layout_height="128dp"
-            android:layout_marginStart="-64dp"
-            android:layout_marginBottom="0dp"
-            android:scaleType="centerInside"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <com.bignerdranch.android.cardcounting.CardView
-            android:id="@+id/cv_dealer7"
-            android:layout_width="96dp"
-            android:layout_height="128dp"
-            android:layout_marginStart="-64dp"
-            android:layout_marginBottom="0dp"
-            android:scaleType="centerInside"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <com.bignerdranch.android.cardcounting.CardView
-            android:id="@+id/cv_dealer8"
-            android:layout_width="96dp"
-            android:layout_height="128dp"
-            android:layout_marginStart="-64dp"
-            android:layout_marginBottom="0dp"
-            android:scaleType="centerInside"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <TextView
-            android:layout_height="32dp"
-            android:layout_width="match_parent"
-            android:id="@+id/dealer_hand_value"
-            android:text="@string/blackjack_dealer_hand_value"
-            android:textSize="24sp" />
-    </LinearLayout>
-
-    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="128dp"
         android:layout_marginTop="320dp"
@@ -241,117 +142,33 @@
         </TextView>
     </LinearLayout>
 
-
-    <LinearLayout
-        android:id="@+id/player_layout"
-        android:layout_width="match_parent"
-        android:layout_height="128dp"
-        android:layout_alignParentBottom="true"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/dealerHandRecyclerView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="96dp"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="16dp"
         android:orientation="horizontal"
-        android:weightSum="6"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tempReturn"
+        tools:listitem="@layout/blackjack_card_view" />
 
-        <com.bignerdranch.android.cardcounting.CardView
-            android:id="@+id/cv_player1"
-            android:layout_width="96dp"
-            android:layout_height="128dp"
-            android:layout_marginStart="0dp"
-            android:layout_marginBottom="128dp"
-            android:scaleType="centerInside"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <com.bignerdranch.android.cardcounting.CardView
-            android:id="@+id/cv_player2"
-            android:layout_width="96dp"
-            android:layout_height="128dp"
-            android:layout_marginStart="-64dp"
-            android:layout_marginBottom="0dp"
-            android:scaleType="centerInside"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <com.bignerdranch.android.cardcounting.CardView
-            android:id="@+id/cv_player3"
-            android:layout_width="96dp"
-            android:layout_height="128dp"
-            android:layout_marginStart="-64dp"
-            android:layout_marginBottom="0dp"
-            android:scaleType="centerInside"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <com.bignerdranch.android.cardcounting.CardView
-            android:id="@+id/cv_player4"
-            android:layout_width="96dp"
-            android:layout_height="128dp"
-            android:layout_marginStart="-64dp"
-            android:layout_marginBottom="0dp"
-            android:scaleType="centerInside"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <com.bignerdranch.android.cardcounting.CardView
-            android:id="@+id/cv_player5"
-            android:layout_width="96dp"
-            android:layout_height="128dp"
-            android:layout_marginStart="-64dp"
-            android:layout_marginBottom="0dp"
-            android:scaleType="centerInside"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <com.bignerdranch.android.cardcounting.CardView
-            android:id="@+id/cv_player6"
-            android:layout_width="96dp"
-            android:layout_height="128dp"
-            android:layout_marginStart="-64dp"
-            android:layout_marginBottom="0dp"
-            android:scaleType="centerInside"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <com.bignerdranch.android.cardcounting.CardView
-            android:id="@+id/cv_player7"
-            android:layout_width="96dp"
-            android:layout_height="128dp"
-            android:layout_marginStart="-64dp"
-            android:layout_marginBottom="0dp"
-            android:scaleType="centerInside"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <com.bignerdranch.android.cardcounting.CardView
-            android:id="@+id/cv_player8"
-            android:layout_width="96dp"
-            android:layout_height="128dp"
-            android:layout_marginStart="-64dp"
-            android:layout_marginBottom="0dp"
-            android:scaleType="centerInside"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_height="32dp"
-                android:layout_width="match_parent"
-                android:id="@+id/player_hand_value"
-                android:text="@string/blackjack_player_hand_value"
-                android:textSize="24sp" />
-
-            <TextView
-                android:layout_height="32dp"
-                android:layout_width="match_parent"
-                android:id="@+id/player_hand_bet_value"
-                android:text="@string/blackjack_hand_bet"
-                android:textSize="24sp" />
-        </LinearLayout>
-    </LinearLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/playerHandRecyclerView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="32dp"
+        android:orientation="horizontal"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@+id/controls_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:listitem="@layout/blackjack_card_view" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

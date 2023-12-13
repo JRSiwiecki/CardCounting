@@ -5,56 +5,43 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
+import androidx.activity.viewModels
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.bignerdranch.android.cardcounting.databinding.ActivityBettingBinding
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bignerdranch.android.cardcounting.databinding.ActivityPlayScreenBinding
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 
-data class HandData(
-    var bet: Float,
-    var cardList: MutableList<Card> = mutableListOf(),
-    var value: Int = 0,
-    var aceCount: Int = 0,
-)
 
 class PlayScreenActivity : AppCompatActivity(){
     private lateinit var binding: ActivityPlayScreenBinding
 
-    private var money: Float = 0f
     private lateinit var moneyTextView: TextView
-    private lateinit var betAmounts: MutableList<Float>
 
+    private lateinit var dealerHandRecyclerView: RecyclerView
+    private lateinit var playerHandRecyclerView: RecyclerView
     private var paused: Boolean = false
-    private lateinit var dealerCard1: CardView
-    private lateinit var dealerCard2: CardView
-    private lateinit var dealerCard3: CardView
-    private lateinit var dealerCard4: CardView
-    private lateinit var dealerCard5: CardView
-    private lateinit var dealerCard6: CardView
-    private lateinit var dealerCard7: CardView
-    private lateinit var dealerCard8: CardView
 
-    private var hands: MutableList<HandData> = mutableListOf()  // Initialize the list
-    private lateinit var dealer: HandData
+    private lateinit var dealerAdapter: CardAdapter
+    private lateinit var playerAdapter: CardAdapter
 
-    private lateinit var activeHand: HandData
-    private var activeHandIndex: Int = 0
-
-    private lateinit var deck: Deck
+    private val playScreenViewModel: PlayScreenViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPlayScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        deck = Deck.Builder().build()
+        playScreenViewModel.deck = Deck.Builder().build()
 
         // Retrieve data from the intent
-        money = intent.getFloatExtra("money", 0f) // 0f is the default value if the key is not found
+        // 0f is the default value if the key is not found
+        playScreenViewModel.money = intent.getFloatExtra("money", 0f)
         val betAmountsArray = intent.getFloatArrayExtra("betAmounts")
-        betAmounts = betAmountsArray?.toMutableList() ?: mutableListOf()
+        playScreenViewModel.betAmounts = betAmountsArray?.toMutableList() ?: mutableListOf()
+
 
         moneyTextView = binding.gameMoney
         // Now you can use 'money' and 'betAmounts' in your ActivityPlayScreen
@@ -81,81 +68,40 @@ class PlayScreenActivity : AppCompatActivity(){
         }
 
         startBlackJack()
-
-
-
-
+        setUpHandViews()
+        updateCardViews()
     }
 
     private fun startBlackJack(){
-        Log.d("Blackjack", "Starting a new round")
-        for(value in betAmounts){
-            if(value > 0){
-                hands.add(HandData(bet = value))
-            }
-        }
-
-        dealer = HandData(bet = 0f)
-
-        for(hand in hands){
-            dealCard(hand)
-        }
-
-        dealCard(dealer)
-
-        for(hand in hands){
-            dealCard(hand)
-        }
-
-        dealCard(dealer)
-
+        playScreenViewModel.startBlackJack()
 
         //Pay out all blackjack players
-        for(hand in hands){
+        for(hand in playScreenViewModel.hands){
             if(hand.value == 21){
-                if(dealer.value < 21){
-                    DisplayToast("Blackjack!")
-                    money += (hand.bet * 2.5f)
-                    displayCurrentMoney()
-                }else{
-                    money += (hand.bet)
-                    displayCurrentMoney()
-                }
-                clearHand(hand)
+                displayCurrentMoney()
             }
         }
-
-        if(dealer.value == 21){
-            DisplayToast("Dealer Blackjack!")
-            for(hand in hands){
-                clearHand(hand)
-            }
-
-            //End game
-            gameOver()
-        }
-
-        activeHandIndex = 0
-        activateHand(hands[0])
-
     }
 
     private fun activateHand(handData: HandData){
-        activeHand = handData
-        activeHand = hands[activeHandIndex]
+        playScreenViewModel.activateHand(handData)
 
         toggleButton(binding.hit, true)
         toggleButton(binding.stay, true)
-        if(money >= handData.bet) {
+
+        if(playScreenViewModel.money >= handData.bet) {
             toggleButton(binding.doubleDown, true)
         } else{
             toggleButton(binding.doubleDown, false)
         }
-        if(handData.cardList[0].rank == handData.cardList[1].rank && money >= handData.bet) {
+
+        if(handData.cardList[0].rank == handData.cardList[1].rank
+                && playScreenViewModel.money >= handData.bet) {
             toggleButton(binding.split, true)
         } else {
             toggleButton(binding.split, false)
         }
+
         Log.d("Blackjack", "The starting hand value is:" + handData.value)
     }
 
@@ -175,6 +121,7 @@ class PlayScreenActivity : AppCompatActivity(){
             }
         }
         Log.d("Blackjack", "The current hand value is:" + handData.value)
+        updateCardViews()
     }
 
     private fun toggleButton(button: Button, enabled: Boolean){
@@ -186,163 +133,90 @@ class PlayScreenActivity : AppCompatActivity(){
         }
     }
 
-    private fun dealCard(handData: HandData){
-        val newCard = deck.dealCard() ?: Card(Suit.SPADES, Rank.TWO)
-        handData.cardList.add(newCard)
-        handData.value += newCard.rank.value
-        if(newCard.rank.value == 11){
-            handData.aceCount ++
-        }
-        Log.d("Blackjack", "The card is a " + newCard.rank.name)
+    private fun hit(){
+        playScreenViewModel.hit()
+        updateHand(playScreenViewModel.activeHand)
+        updateCardViews()
     }
 
-    private fun recalculateHandValue(handData: HandData){
-        handData.value = 0
-        handData.aceCount = 0
-        for(card in handData.cardList){
-            handData.value += card.rank.value
-            if(card.rank.value == 11){
-                handData.aceCount ++
-            }
 
-            if(handData.value > 21 && handData.aceCount > 0){
-                handData.value -= 10
-                handData.aceCount --
-            }
-        }
-    }
 
     private fun stand(){
-        if(paused){
-            return
-        }
-
-        Log.d("Blackjack", "Standing at: " + hands[activeHandIndex].value)
-        endHand(activeHand)
-    }
-
-    private  fun hit(){
-        if(paused){
-            return
-        }
-
-        Log.d("Blackjack", "Hit")
-        dealCard(activeHand)
-        updateHand(activeHand)
+        Log.d(
+            "Blackjack",
+            "Standing at: "
+                    + playScreenViewModel.hands[playScreenViewModel.activeHandIndex].value)
+        endHand(playScreenViewModel.activeHand)
     }
 
     private fun double(){
-        if(paused){
-            return
-        }
-
-        Log.d("Blackjack", "Double")
-        //Theoretically all options but stay will be closed, forcing them to stay without recycling any logic
+        playScreenViewModel.double()
+        //Theoretically all options but stay will be closed,
+        // forcing them to stay without recycling any logic
         toggleButton(binding.hit, false)
 
-        //money -= activeHand.bet
-        money -= hands[activeHandIndex].bet
         displayCurrentMoney()
 
-        //activeHand.bet *= 2
-        hands[activeHandIndex].bet *= 2
-
-        //dealCard(activeHand)
-        dealCard(hands[activeHandIndex])
-        //updateHand(activeHand)
-        updateHand(hands[activeHandIndex])
-
+        updateHand(playScreenViewModel.hands[playScreenViewModel.activeHandIndex])
     }
 
     private fun split(){
-        if(paused){
-            return
-        }
-        Log.d("Blackjack", "Split")
-        //create a new hand with one of the card, deal a new card to each of those hands, and then continue with this hand
-        //technically not the same card order but really doesnt matter
+        playScreenViewModel.split()
 
-        money -= hands[activeHandIndex].bet
+        activateHand(playScreenViewModel.hands[playScreenViewModel.activeHandIndex])
+
         displayCurrentMoney()
 
-        val movedcard = hands[activeHandIndex].cardList[0]
-        Log.d("Blackjack", "The split card is: " + movedcard.display)
-        hands[activeHandIndex].cardList.removeAt(0)
-        recalculateHandValue(hands[activeHandIndex])
-
-        //Add a new hand to the list, and split the cards between the two
-        hands.add(activeHandIndex, HandData(bet = hands[activeHandIndex].bet))
-
-        hands[activeHandIndex].cardList.add(movedcard)
-        recalculateHandValue(hands[activeHandIndex])
-
-        dealCard(hands[activeHandIndex])
-        updateHand(hands[activeHandIndex])
-        Log.d("Blackjack", "The right hands size is + : " + hands[activeHandIndex].cardList.size)
-
-        dealCard(hands[activeHandIndex + 1])
-        updateHand(hands[activeHandIndex + 1])
-        Log.d("Blackjack", "The right hands size is + : " + hands[activeHandIndex+1].cardList.size)
-
-        activateHand(hands[activeHandIndex])
-
-    }
-
-    private fun clearHand(handData: HandData){
-        //remove hand from table and list
-        hands.removeAt(activeHandIndex)
-        activeHandIndex --
+        updateHand(playScreenViewModel.hands[playScreenViewModel.activeHandIndex])
+        updateHand(playScreenViewModel.hands[playScreenViewModel.activeHandIndex + 1])
     }
 
     private fun bustHand(handData: HandData){
-        clearHand(handData)
+        playScreenViewModel.clearHand(handData)
     }
 
     private fun endHand(handData: HandData){
         //if theres another hand    activate the next hand
-        //else dealerturn
-        activeHandIndex ++
-        if(activeHandIndex < hands.size){
-            activateHand(hands[activeHandIndex])
-        } else{
-            runBlocking{
-                dealerTurn()
-            }
-
+        //else dealer's turn
+        val endPlayerTurn = playScreenViewModel.endHand(handData)
+        if (endPlayerTurn) {
+            dealerTurn()
         }
     }
 
     suspend fun dealerTurn(){
         Log.d("Blackjack", "Starting the dealers turn")
 
-        if(hands.isEmpty()){
+        if(playScreenViewModel.hands.isEmpty()){
             gameOver()
             return
         }
 
-        while(dealer.value < 17 || (dealer.value == 17 && dealer.aceCount > 0)){
-            dealCard(dealer)
-            updateHand(dealer)
-            delay(1000)
+        while(playScreenViewModel.dealer.value < 17
+                || (playScreenViewModel.dealer.value == 17 &&
+                playScreenViewModel.dealer.aceCount > 0)) {
+            playScreenViewModel.dealCard(playScreenViewModel.dealer)
         }
 
-        if(dealer.value > 21){
-            DisplayToast("Dealer Bust!")
-            for (hand in hands){
+        if(playScreenViewModel.dealer.value > 21){
+            for (hand in playScreenViewModel.hands){
                 payoutHand(hand)
                 delay(2000)
             }
         }else{
-            for (hand in hands){
-                if(dealer.value < hand.value){
+            for (hand in playScreenViewModel.hands){
+                
+              if(playScreenViewModel.dealer.value < hand.value) {
                     payoutHand(hand)
-                }else if(dealer.value == hand.value){
+                
+              } else if(playScreenViewModel.dealer.value == hand.value) {
+                    playScreenViewModel.money += hand.bet
                     DisplayToast("Push!")
-                    money += hand.bet
+
                     displayCurrentMoney()
-                }else{
+              } else {
                     DisplayToast("Lose!")
-                }
+              }
                 delay(2000)
             }
         }
@@ -351,8 +225,8 @@ class PlayScreenActivity : AppCompatActivity(){
     }
 
     private fun payoutHand(handData: HandData){
+        playScreenViewModel.money += handData.bet * 2
         DisplayToast("Win!")
-        money += handData.bet * 2
         displayCurrentMoney()
     }
 
@@ -363,11 +237,7 @@ class PlayScreenActivity : AppCompatActivity(){
     }
 
     private fun displayCurrentMoney() {
-        moneyTextView.text = "Money: $${String.format("%.2f", money)}"
-    }
-
-    private fun setButtonTextValue(button: Button, value: Float) {
-        button.text = "${String.format("%.0f", value)}"
+        moneyTextView.text = "Money: $${String.format("%.2f", playScreenViewModel.money)}"
     }
 
     private fun DisplayToast(message: String){
@@ -385,16 +255,38 @@ class PlayScreenActivity : AppCompatActivity(){
         delay(delay.toLong())
         paused = false
     }
-
-
+    
     private fun returnToBetting(){
         val intent = Intent(this, PlayActivity::class.java)
 
         // Pass the necessary data to the next activity
-        intent.putExtra("money", money)
+        intent.putExtra("money", playScreenViewModel.money)
 
         // Start the next activity
         startActivity(intent)
     }
 
+    private fun setUpHandViews() {
+        dealerHandRecyclerView = findViewById(R.id.dealerHandRecyclerView)
+        playerHandRecyclerView = findViewById(R.id.playerHandRecyclerView)
+
+        dealerHandRecyclerView.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+
+        playerHandRecyclerView.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+
+        // Initialize adapters for both dealer and player
+        dealerAdapter = CardAdapter(this, playScreenViewModel.dealer.cardList, isDealer = true)
+        dealerHandRecyclerView.adapter = dealerAdapter
+
+        playerAdapter = CardAdapter(this, playScreenViewModel.activeHand.cardList, isDealer = false)
+        playerHandRecyclerView.adapter = playerAdapter
+    }
+
+    private fun updateCardViews() {
+        // Worst case scenario, go back to using .notifyDataSetChanged()
+        dealerAdapter.notifyItemInserted(dealerAdapter.itemCount)
+        playerAdapter.notifyItemInserted(playerAdapter.itemCount)
+    }
 }
