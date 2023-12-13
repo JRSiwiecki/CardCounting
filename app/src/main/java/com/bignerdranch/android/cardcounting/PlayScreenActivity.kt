@@ -269,30 +269,30 @@ class PlayScreenActivity : AppCompatActivity(){
         dealerAdapter = CardAdapter(this, playScreenViewModel.dealer.cardList, isDealer = true)
         dealerHandRecyclerView.adapter = dealerAdapter
 
-        playerAdapterBottom = CardAdapter(this, playScreenViewModel.activeHand.cardList, isDealer = false)
+        playerAdapterBottom = CardAdapter(this, playScreenViewModel.hands[0].cardList, isDealer = false)
         playerHandRecyclerViewBottom.adapter = playerAdapterBottom
 
         // Set up extra player hands if needed
         playerHandRecyclerViewMiddle = findViewById(R.id.playerHandRecyclerViewMiddle)
         playerHandRecyclerViewTop = findViewById(R.id.playerHandRecyclerViewTop)
 
+        // Display each one that is needed
         when (playScreenViewModel.betAmounts.size) {
             2 -> {
-                playerAdapterMiddle = CardAdapter(this, playScreenViewModel.activeHand.cardList, isDealer = false)
+                playerAdapterMiddle = CardAdapter(this, playScreenViewModel.hands[1].cardList, isDealer = false)
                 playerHandRecyclerViewMiddle.adapter = playerAdapterMiddle
 
                 playerHandRecyclerViewMiddle.isVisible = true
             }
 
             3 -> {
-                playerAdapterMiddle = CardAdapter(this, playScreenViewModel.activeHand.cardList, isDealer = false)
+                playerAdapterMiddle = CardAdapter(this, playScreenViewModel.hands[1].cardList, isDealer = false)
                 playerHandRecyclerViewMiddle.adapter = playerAdapterMiddle
 
-                playerHandRecyclerViewMiddle.isVisible = true
-
-                playerAdapterTop = CardAdapter(this, playScreenViewModel.activeHand.cardList, isDealer = false)
+                playerAdapterTop = CardAdapter(this, playScreenViewModel.hands[2].cardList, isDealer = false)
                 playerHandRecyclerViewTop.adapter = playerAdapterTop
 
+                playerHandRecyclerViewMiddle.isVisible = true
                 playerHandRecyclerViewTop.isVisible = true
             }
         }
@@ -305,18 +305,18 @@ class PlayScreenActivity : AppCompatActivity(){
 
         when (playScreenViewModel.betAmounts.size) {
             1 -> {
-                playerAdapterBottom.notifyItemInserted(playerAdapterBottom.itemCount)
+                playerAdapterBottom.notifyItemInserted(playScreenViewModel.hands[0].cardList.size - 1)
             }
 
             2 -> {
-                playerAdapterBottom.notifyItemInserted(playerAdapterBottom.itemCount)
-                playerAdapterMiddle.notifyItemInserted(playerAdapterMiddle.itemCount)
+                playerAdapterBottom.notifyItemInserted(playScreenViewModel.hands[0].cardList.size - 1)
+                playerAdapterMiddle.notifyItemInserted(playScreenViewModel.hands[1].cardList.size - 1)
             }
 
             3 -> {
-                playerAdapterBottom.notifyItemInserted(playerAdapterBottom.itemCount)
-                playerAdapterMiddle.notifyItemInserted(playerAdapterMiddle.itemCount)
-                playerAdapterTop.notifyItemInserted(playerAdapterTop.itemCount)
+                playerAdapterBottom.notifyItemInserted(playScreenViewModel.hands[0].cardList.size - 1)
+                playerAdapterMiddle.notifyItemInserted(playScreenViewModel.hands[1].cardList.size - 1)
+                playerAdapterTop.notifyItemInserted(playScreenViewModel.hands[2].cardList.size - 1)
             }
         }
     }
