@@ -121,41 +121,6 @@ class PlayScreenViewModel : ViewModel() {
         //updateHand(activeHand)
     }
 
-    fun split(){
-        Log.d("Blackjack", "Split")
-        //create a new hand with one of the card,
-        // deal a new card to each of those hands, and then continue with this hand
-        //technically not the same card order but really doesn't matter
-
-        money -= hands[activeHandIndex].bet
-
-        val movedCard = hands[activeHandIndex].cardList[0]
-        Log.d("Blackjack", "The split card is: " + movedCard.display)
-        hands[activeHandIndex].cardList.removeAt(0)
-        recalculateHandValue(hands[activeHandIndex])
-
-        //Add a new hand to the list, and split the cards between the two
-        hands.add(activeHandIndex, HandData(bet = hands[activeHandIndex].bet))
-
-        hands[activeHandIndex].cardList.add(movedCard)
-        recalculateHandValue(hands[activeHandIndex])
-
-        dealCard(hands[activeHandIndex])
-
-        Log.d(
-            "Blackjack",
-            "The right hands size is + : "
-                    + hands[activeHandIndex].cardList.size
-        )
-
-        dealCard(hands[activeHandIndex + 1])
-
-        Log.d("Blackjack",
-            "The right hands size is + : "
-                    + hands[activeHandIndex+1].cardList.size
-        )
-    }
-
     fun clearHand() {
         //remove hand from table and list
         hands.removeAt(activeHandIndex)
