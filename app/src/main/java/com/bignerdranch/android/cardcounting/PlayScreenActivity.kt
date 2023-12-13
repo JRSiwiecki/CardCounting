@@ -180,7 +180,9 @@ class PlayScreenActivity : AppCompatActivity(){
         //else dealer's turn
         val endPlayerTurn = playScreenViewModel.endHand(handData)
         if (endPlayerTurn) {
-            dealerTurn()
+            runBlocking {
+                dealerTurn()
+            }
         }
     }
 
