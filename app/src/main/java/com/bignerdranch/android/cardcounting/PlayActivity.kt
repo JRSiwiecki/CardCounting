@@ -49,10 +49,6 @@ class PlayActivity : AppCompatActivity() {
             startGame()
         }
 
-        binding.acceptBet.setOnClickListener {
-            lockInBet()
-        }
-
     }
 
     private fun displayCurrentMoney() {
@@ -117,15 +113,6 @@ class PlayActivity : AppCompatActivity() {
         activeButton.backgroundTintList = ColorStateList.valueOf(0xFFFF0000.toInt())
 
     }
-
-    private fun lockInBet(){
-        val index = betButtonMap[activeButton.id] ?: 0
-        betAmounts[index] = activeButton.text.toString().toFloat()
-        money -= activeButton.text.toString().toFloat()
-        displayCurrentMoney()
-    }
-
-
 
     private fun startGame() {
 
