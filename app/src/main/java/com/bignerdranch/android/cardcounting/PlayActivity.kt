@@ -83,7 +83,7 @@ class PlayActivity : AppCompatActivity() {
     }
 
     private fun setCountingButtonListeners() {
-        val bettingButtons = listOf<Button>(findViewById(R.id.add_10), findViewById(R.id.minus_10), /* add other buttons as needed */)
+        val bettingButtons = listOf<Button>(findViewById(R.id.add_10), findViewById(R.id.minus_10), findViewById(R.id.add_25), findViewById(R.id.minus_25),findViewById(R.id.add_50), findViewById(R.id.minus_50),findViewById(R.id.add_100), findViewById(R.id.minus_100),)
 
         for (button in bettingButtons) {
             button.setOnClickListener {

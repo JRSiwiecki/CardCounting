@@ -88,15 +88,14 @@ class PlayScreenActivity : AppCompatActivity(){
             double()
         }
 
-        startBlackJack()
-        Log.d("Blackjack", "Blackjack started")
+        lifecycleScope.launch {
+            startBlackJack()
+        }
 
-        Log.d("Blackjack", "Handviews set up")
-        updateCardViews()
-        Log.d("Blackjack", "Cards updated")
+
     }
 
-    private fun startBlackJack(){
+    private suspend fun startBlackJack(){
         playScreenViewModel.startBlackJack()
 
         setUpHandViews()
@@ -105,12 +104,15 @@ class PlayScreenActivity : AppCompatActivity(){
         var i = 0
         for(hand in playScreenViewModel.hands){
             if(hand.value == 21){
+
                 playScreenViewModel.money += if(playScreenViewModel.dealer.value < 21){
                     (hand.bet * 2.5f)
 
                 }else{
                     (hand.bet)
                 }
+                displayToast("Blackjack!")
+                delay(2000)
                 playerVisuals[i].recycler.isVisible = false
                 finishedHands.add(i)
                 displayCurrentMoney()
@@ -123,24 +125,18 @@ class PlayScreenActivity : AppCompatActivity(){
                 //clearHand(hand)
             }
 
+            displayToast("Dealer Blackjack")
+            delay(2000)
             //End game
             gameOver()
         }
 
-        playScreenViewModel.activeHandIndex = 0
-        playScreenViewModel.activateHand(playScreenViewModel.hands[0])
+        playScreenViewModel.activeHandIndex = -1
+        //playScreenViewModel.activateHand(playScreenViewModel.hands[0])
+        endHand()
 
+        updateCardViews()
 
-        //Pay out all blackjack players
-        /*for(hand in playScreenViewModel.hands){
-            if(hand.value == 21){
-                displayCurrentMoney()
-            }
-        }*/
-
-
-        /*playerVisuals[playScreenViewModel.activeHandIndex].recycler.isVisible = false
-        finishedHands.add(playScreenViewModel.activeHandIndex)*/
     }
 
     private fun updateHand(handData: HandData){
@@ -333,15 +329,25 @@ class PlayScreenActivity : AppCompatActivity(){
         toast.show()
 
         lifecycleScope.launch {
-            pauseInput(Toast.LENGTH_SHORT)
+            pauseInput(1800)
         }
 
     }
 
     private suspend fun pauseInput(delay: Int){
-        paused = true
+        var hitOption = binding.hit.isEnabled
+        var stayOption = binding.stay.isEnabled
+        var doubleOption = binding.doubleDown.isEnabled
+
+        toggleButton(binding.hit, false)
+        toggleButton(binding.stay, false)
+        toggleButton(binding.doubleDown, false)
+
         delay(delay.toLong())
-        paused = false
+
+        toggleButton(binding.hit, hitOption)
+        toggleButton(binding.stay, stayOption)
+        toggleButton(binding.doubleDown, doubleOption)
     }
     
     private fun returnToBetting(){
