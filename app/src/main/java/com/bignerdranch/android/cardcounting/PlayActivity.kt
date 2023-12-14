@@ -30,7 +30,7 @@ class PlayActivity : AppCompatActivity() {
         binding = ActivityBettingBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        money = intent.getFloatExtra("money", 50.50f)
+        money = intent.getFloatExtra("money", 500.0f)
 
         // Assuming you have a TextView with id "moneyTextView" in your layout
         moneyTextView = binding.money

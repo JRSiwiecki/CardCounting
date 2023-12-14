@@ -20,14 +20,24 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 
+data class HandVisuals(
+    val recycler: RecyclerView,
+    val adapter: CardAdapter,
+    // Add other properties as needed
+)
+
 class PlayScreenActivity : AppCompatActivity(){
     private lateinit var binding: ActivityPlayScreenBinding
 
     private lateinit var moneyTextView: TextView
 
     private var paused: Boolean = false
+    private var bustedHandCount: Int = 0
+    private var finishedHands: MutableList<Int> = mutableListOf()
 
     // Player hands
+    private var playerVisuals: MutableList<HandVisuals> = mutableListOf()
+
     private lateinit var playerHandRecyclerViewBottom: RecyclerView
     private lateinit var playerHandRecyclerViewMiddle: RecyclerView
     private lateinit var playerHandRecyclerViewTop: RecyclerView
@@ -37,6 +47,8 @@ class PlayScreenActivity : AppCompatActivity(){
     private lateinit var playerAdapterTop: CardAdapter
 
     // Dealer hands
+    private lateinit var dealerVisuals: HandVisuals
+
     private lateinit var dealerHandRecyclerView: RecyclerView
     private lateinit var dealerAdapter: CardAdapter
 
@@ -77,19 +89,58 @@ class PlayScreenActivity : AppCompatActivity(){
         }
 
         startBlackJack()
-        setUpHandViews()
+        Log.d("Blackjack", "Blackjack started")
+
+        Log.d("Blackjack", "Handviews set up")
         updateCardViews()
+        Log.d("Blackjack", "Cards updated")
     }
 
     private fun startBlackJack(){
         playScreenViewModel.startBlackJack()
 
+        setUpHandViews()
+
         //Pay out all blackjack players
+        var i = 0
         for(hand in playScreenViewModel.hands){
+            if(hand.value == 21){
+                playScreenViewModel.money += if(playScreenViewModel.dealer.value < 21){
+                    (hand.bet * 2.5f)
+
+                }else{
+                    (hand.bet)
+                }
+                playerVisuals[i].recycler.isVisible = false
+                finishedHands.add(i)
+                displayCurrentMoney()
+            }
+            i++
+        }
+
+        if(playScreenViewModel.dealer.value == 21){
+            for (hand in playScreenViewModel.hands){
+                //clearHand(hand)
+            }
+
+            //End game
+            gameOver()
+        }
+
+        playScreenViewModel.activeHandIndex = 0
+        playScreenViewModel.activateHand(playScreenViewModel.hands[0])
+
+
+        //Pay out all blackjack players
+        /*for(hand in playScreenViewModel.hands){
             if(hand.value == 21){
                 displayCurrentMoney()
             }
-        }
+        }*/
+
+
+        /*playerVisuals[playScreenViewModel.activeHandIndex].recycler.isVisible = false
+        finishedHands.add(playScreenViewModel.activeHandIndex)*/
     }
 
     private fun updateHand(handData: HandData){
@@ -127,13 +178,15 @@ class PlayScreenActivity : AppCompatActivity(){
     }
 
     private fun stand(){
+        //toggleButton(binding.hit, false)
         Log.d(
             "Blackjack",
             "Standing at: "
                     + playScreenViewModel.hands[playScreenViewModel.activeHandIndex].value)
-        endHand()
 
         updateHand(playScreenViewModel.hands[playScreenViewModel.activeHandIndex])
+
+        endHand()
     }
 
     private fun double(){
@@ -148,29 +201,60 @@ class PlayScreenActivity : AppCompatActivity(){
     }
 
     private fun bustHand(){
-        playScreenViewModel.clearHand()
+        //playScreenViewModel.clearHand()
+        playerVisuals[playScreenViewModel.activeHandIndex].recycler.isVisible = false
+        finishedHands.add(playScreenViewModel.activeHandIndex)
 
-        if (playScreenViewModel.activeHandIndex < playScreenViewModel.hands.size) {
+
+
+        /*if (playScreenViewModel.activeHandIndex < playScreenViewModel.hands.size) {
             updateHand(playScreenViewModel.hands[playScreenViewModel.activeHandIndex])
         } else {
             Log.d("BJ", "LEAVE")
             gameOver()
-        }
+        }*/
+
 
     }
 
     private fun endHand() {
-        //if theres another hand    activate the next hand
-        //else dealer's turn
-        val endPlayerTurn = playScreenViewModel.endHand()
 
-        // updateHand(playScreenViewModel.hands[playScreenViewModel.activeHandIndex])
 
-        if (endPlayerTurn) {
+        //playerVisuals[playScreenViewModel.activeHandIndex].recycler.isVisible = false
+
+        var ended = false
+            //if theres another hand    activate the next hand
+            //else dealer's turn
+        playScreenViewModel.activeHandIndex++
+
+        while(finishedHands.contains(playScreenViewModel.activeHandIndex) && playScreenViewModel.activeHandIndex< playScreenViewModel.hands.size){
+            playScreenViewModel.activeHandIndex++
+        }
+
+        if(playScreenViewModel.activeHandIndex < playScreenViewModel.hands.size){
+            playScreenViewModel.activateHand(playScreenViewModel.hands[playScreenViewModel.activeHandIndex])
+            ended = false
+        } else {
+
+            playScreenViewModel.activeHandIndex = 0
+            ended = true
+        }
+
+
+        if (ended) {
+            toggleButton(binding.hit, false)
+            toggleButton(binding.stay, false)
+            toggleButton(binding.doubleDown, false)
             lifecycleScope.launch {
                 dealerTurn()
             }
+        }else{
+            toggleButton(binding.hit, true)
+            toggleButton(binding.stay, true)
+            toggleButton(binding.doubleDown, true)
         }
+
+        updateCardViews()
     }
 
     private suspend fun dealerTurn(){
@@ -181,9 +265,8 @@ class PlayScreenActivity : AppCompatActivity(){
             return
         }
 
-        while(playScreenViewModel.dealer.value < 17
-                || (playScreenViewModel.dealer.value == 17 &&
-                playScreenViewModel.dealer.aceCount > 0)) {
+        while(playScreenViewModel.dealer.value < 17 ||
+            (playScreenViewModel.dealer.value == 17 && playScreenViewModel.dealer.aceCount > 0)) {
             playScreenViewModel.dealCard(playScreenViewModel.dealer)
         }
 
@@ -191,14 +274,25 @@ class PlayScreenActivity : AppCompatActivity(){
             updateDealerCards()
         }
 
+        var i = 0
         if(playScreenViewModel.dealer.value > 21){
             for (hand in playScreenViewModel.hands){
+                if(finishedHands.contains(i)){
+                    continue
+                }
+
                 payoutHand(hand)
                 delay(2000)
+                playerVisuals[i].recycler.isVisible = false
+                i++
             }
         }else{
             for (hand in playScreenViewModel.hands){
-                
+
+                if(finishedHands.contains(i)){
+                    continue
+                }
+
               if(playScreenViewModel.dealer.value < hand.value) {
                     payoutHand(hand)
                 
@@ -211,6 +305,8 @@ class PlayScreenActivity : AppCompatActivity(){
                   displayToast("Lose!")
               }
                 delay(2000)
+                playerVisuals[i].recycler.isVisible = false
+                i++
             }
         }
 
@@ -279,15 +375,39 @@ class PlayScreenActivity : AppCompatActivity(){
         playerAdapterBottom = CardAdapter(this, playScreenViewModel.hands[0].cardList, isDealer = false)
         playerHandRecyclerViewBottom.adapter = playerAdapterBottom
 
+        playerVisuals.add(HandVisuals(recycler = playerHandRecyclerViewBottom, adapter = playerAdapterBottom))
         // Set up extra player hands if needed
         playerHandRecyclerViewMiddle = findViewById(R.id.playerHandRecyclerViewMiddle)
         playerHandRecyclerViewTop = findViewById(R.id.playerHandRecyclerViewTop)
 
         // Display each one that is needed
-        when (playScreenViewModel.betAmounts.size) {
+        if(playScreenViewModel.betAmounts.size >= 2){
+
+            playerAdapterMiddle = CardAdapter(this, playScreenViewModel.hands[1].cardList, isDealer = false)
+            playerHandRecyclerViewMiddle.adapter = playerAdapterMiddle
+
+            playerVisuals.add(HandVisuals(recycler = playerHandRecyclerViewMiddle, adapter = playerAdapterMiddle))
+
+            playerHandRecyclerViewMiddle.isVisible = true
+
+        }
+
+        if(playScreenViewModel.betAmounts.size >= 3){
+
+            playerAdapterTop = CardAdapter(this, playScreenViewModel.hands[2].cardList, isDealer = false)
+            playerHandRecyclerViewTop.adapter = playerAdapterTop
+
+            playerVisuals.add(HandVisuals(recycler = playerHandRecyclerViewTop, adapter = playerAdapterTop))
+
+            playerHandRecyclerViewTop.isVisible = true
+
+        }
+        /*when (playScreenViewModel.betAmounts.size) {
             2 -> {
                 playerAdapterMiddle = CardAdapter(this, playScreenViewModel.hands[1].cardList, isDealer = false)
                 playerHandRecyclerViewMiddle.adapter = playerAdapterMiddle
+
+                playerVisuals.add(HandVisuals(recycler = playerHandRecyclerViewMiddle, adapter = playerAdapterMiddle))
 
                 playerHandRecyclerViewMiddle.isVisible = true
             }
@@ -299,10 +419,12 @@ class PlayScreenActivity : AppCompatActivity(){
                 playerAdapterTop = CardAdapter(this, playScreenViewModel.hands[2].cardList, isDealer = false)
                 playerHandRecyclerViewTop.adapter = playerAdapterTop
 
+                playerVisuals.add(HandVisuals(recycler = playerHandRecyclerViewMiddle, adapter = playerAdapterMiddle))
+
                 playerHandRecyclerViewMiddle.isVisible = true
                 playerHandRecyclerViewTop.isVisible = true
             }
-        }
+        }*/
     }
 
     private fun updateDealerCards() {
@@ -312,7 +434,10 @@ class PlayScreenActivity : AppCompatActivity(){
     private fun updateCardViews() {
         updateHandColors()
 
-        playerAdapterBottom.notifyDataSetChanged()
+        for(hand in playerVisuals){
+            hand.adapter.notifyDataSetChanged()
+        }
+        /*playerAdapterBottom.notifyDataSetChanged()
 
         if (playScreenViewModel.betAmounts.size >= 2) {
             playerAdapterMiddle.notifyDataSetChanged()
@@ -320,13 +445,18 @@ class PlayScreenActivity : AppCompatActivity(){
 
         if (playScreenViewModel.betAmounts.size >= 3) {
             playerAdapterTop.notifyDataSetChanged()
-        }
+        }*/
     }
 
     private fun updateHandColors() {
-        playerHandRecyclerViewBottom.setBackgroundColor(getBackgroundColor(0))
+        var i = 0
+        for(hand in playerVisuals){
+            hand.recycler.setBackgroundColor(getBackgroundColor(i))
+            i++
+        }
+        /*playerHandRecyclerViewBottom.setBackgroundColor(getBackgroundColor(0))
         playerHandRecyclerViewMiddle.setBackgroundColor(getBackgroundColor(1))
-        playerHandRecyclerViewTop.setBackgroundColor(getBackgroundColor(2))
+        playerHandRecyclerViewTop.setBackgroundColor(getBackgroundColor(2))*/
     }
 
     private fun getBackgroundColor(handIndex: Int): Int {

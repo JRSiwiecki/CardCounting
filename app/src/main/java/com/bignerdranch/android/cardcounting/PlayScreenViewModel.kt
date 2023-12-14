@@ -52,33 +52,11 @@ class PlayScreenViewModel : ViewModel() {
 
         dealCard(dealer)
 
-        //Pay out all blackjack players
-        for(hand in hands){
-            if(hand.value == 21){
-                money += if(dealer.value < 21){
-                    (hand.bet * 2.5f)
-                }else{
-                    (hand.bet)
-                }
-                //clearHand(hand)
-            }
-        }
 
-        if(dealer.value == 21){
-            for (hand in hands){
-                //clearHand(hand)
-            }
-
-            //End game
-            //gameOver()
-        }
-
-        activeHandIndex = 0
-        activateHand(hands[0])
 
     }
 
-    private fun activateHand(handData: HandData){
+    fun activateHand(handData: HandData){
         activeHand = handData
     }
 
@@ -105,30 +83,9 @@ class PlayScreenViewModel : ViewModel() {
         //updateHand(activeHand)
     }
 
-    fun clearHand() {
-        //remove hand from table and list
-        hands.removeAt(activeHandIndex)
-        activeHandIndex--
 
-        if (activeHandIndex < 0){
-            activeHandIndex = 0
-        }
-    }
 
-    fun endHand(): Boolean {
-        //if theres another hand    activate the next hand
-        //else dealer's turn
-        activeHandIndex++
 
-        return if(activeHandIndex < hands.size){
-            activateHand(hands[activeHandIndex])
-            false
-        } else {
-
-            activeHandIndex = 0
-            true
-        }
-    }
 
 }
 
