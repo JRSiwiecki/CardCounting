@@ -74,48 +74,94 @@
         android:id="@+id/add_10"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="68dp"
         android:text="+10"
-        android:textSize="34sp"
+        android:textSize="25sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/bet_2"
         tools:text="+10" />
 
     <Button
-        android:id="@+id/minus_10"
+        android:id="@+id/add_25"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="32dp"
-        android:text="-10"
-        android:textSize="34sp"
+        android:layout_marginStart="12dp"
+        android:text="+25"
+        android:textSize="25sp"
+        app:layout_constraintStart_toEndOf="@+id/add_10"
+        app:layout_constraintTop_toTopOf="@+id/add_10"
+        tools:text="+25" />
+
+    <Button
+        android:id="@+id/add_50"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="+50"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toStartOf="@+id/add_100"
+        app:layout_constraintTop_toTopOf="@+id/add_100"
+        tools:text="+50" />
+
+    <Button
+        android:id="@+id/add_100"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="68dp"
+        android:layout_marginEnd="8dp"
+        android:text="+100"
+        android:textSize="25sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/bet_2"
+        tools:text="+100" />
+
+    <Button
+        android:id="@+id/minus_10"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="-10"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="@+id/add_10"
+        app:layout_constraintStart_toStartOf="@+id/add_10"
+        app:layout_constraintTop_toBottomOf="@+id/add_10"
         tools:text="-10" />
 
     <Button
-        android:id="@+id/cancel_bet"
-        android:layout_width="wrap_content"
+        android:id="@+id/minus_25"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginBottom="24dp"
-        android:text="Cancel"
-        android:textSize="34sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:text="Cancel" />
+        android:layout_marginTop="32dp"
+        android:text="-25"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="@+id/add_25"
+        app:layout_constraintStart_toStartOf="@+id/add_25"
+        app:layout_constraintTop_toBottomOf="@+id/add_25"
+        tools:text="-25" />
 
     <Button
-        android:id="@+id/accept_bet"
-        android:layout_width="wrap_content"
+        android:id="@+id/minus_50"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="24dp"
-        android:text="Bet"
-        android:textSize="34sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:text="Bet" />
+        android:layout_marginTop="32dp"
+        android:text="-50"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="@+id/add_50"
+        app:layout_constraintStart_toStartOf="@+id/add_50"
+        app:layout_constraintTop_toBottomOf="@+id/add_50"
+        tools:text="-50" />
+
+    <Button
+        android:id="@+id/minus_100"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="-100"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="@+id/add_100"
+        app:layout_constraintStart_toStartOf="@+id/add_100"
+        app:layout_constraintTop_toBottomOf="@+id/add_100"
+        tools:text="-100" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

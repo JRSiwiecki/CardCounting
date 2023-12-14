@@ -30,7 +30,7 @@ class PlayActivity : AppCompatActivity() {
         binding = ActivityBettingBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        money = intent.getFloatExtra("money", 50.50f)
+        money = intent.getFloatExtra("money", 500.0f)
 
         // Assuming you have a TextView with id "moneyTextView" in your layout
         moneyTextView = binding.money
@@ -47,10 +47,6 @@ class PlayActivity : AppCompatActivity() {
 
         binding.startGame.setOnClickListener {
             startGame()
-        }
-
-        binding.acceptBet.setOnClickListener {
-            lockInBet()
         }
 
     }
@@ -83,7 +79,7 @@ class PlayActivity : AppCompatActivity() {
     }
 
     private fun setCountingButtonListeners() {
-        val bettingButtons = listOf<Button>(findViewById(R.id.add_10), findViewById(R.id.minus_10), /* add other buttons as needed */)
+        val bettingButtons = listOf<Button>(findViewById(R.id.add_10), findViewById(R.id.minus_10), findViewById(R.id.add_25), findViewById(R.id.minus_25),findViewById(R.id.add_50), findViewById(R.id.minus_50),findViewById(R.id.add_100), findViewById(R.id.minus_100),)
 
         for (button in bettingButtons) {
             button.setOnClickListener {
@@ -118,15 +114,6 @@ class PlayActivity : AppCompatActivity() {
 
     }
 
-    private fun lockInBet(){
-        val index = betButtonMap[activeButton.id] ?: 0
-        betAmounts[index] = activeButton.text.toString().toFloat()
-        money -= activeButton.text.toString().toFloat()
-        displayCurrentMoney()
-    }
-
-
-
     private fun startGame() {
 
         val finalBets = betAmounts.toMutableList()
@@ -153,6 +140,13 @@ class PlayActivity : AppCompatActivity() {
 
         // Start the next activity
         startActivity(intent)
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 
 }

@@ -9,7 +9,6 @@
         android:id="@+id/game_money"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:text="@string/blackjack_player_money"
         android:textSize="34sp"
         android:textStyle="bold"
@@ -23,7 +22,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
         android:text="@string/btn_return"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -46,22 +44,22 @@
         android:layout_height="64dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="16dp"
         android:orientation="horizontal"
         android:weightSum="6"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="0dp">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <Button
             android:id="@+id/hit"
             style="@style/ActionButton"
             android:layout_width="84dp"
             android:layout_height="64dp"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="44dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="16dp"
-            android:textSize="14sp"
             android:text="@string/blackjack_hit"
+            android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/stay"
             app:layout_constraintStart_toStartOf="parent"
@@ -75,8 +73,8 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="16dp"
-            android:textSize="14sp"
             android:text="@string/blackjack_stay"
+            android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/double_down"
             app:layout_constraintStart_toEndOf="@+id/hit"
@@ -90,54 +88,38 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="16dp"
-            android:textSize="14sp"
             android:text="@string/blackjack_double"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/split"
-            app:layout_constraintStart_toEndOf="@+id/stay"
-            tools:ignore="VisualLintButtonSize,VisualLintBounds" />
-
-        <Button
-            android:id="@+id/split"
-            style="@style/ActionButton"
-            android:layout_width="84dp"
-            android:layout_height="64dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="0dp"
-            android:layout_marginBottom="16dp"
             android:textSize="14sp"
-            android:text="@string/blackjack_split"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/double_down"
+            app:layout_constraintEnd_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@id/stay"
             tools:ignore="VisualLintButtonSize" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="128dp"
-        android:layout_marginTop="320dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:gravity="center"
-        >
+        app:layout_constraintTop_toBottomOf="@+id/textView3">
 
         <TextView
             android:id="@+id/player_result"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/blackjack_player_wins"
-            android:textSize="48sp">
-        </TextView>
+            android:textSize="24sp"></TextView>
+
         <TextView
             android:id="@+id/player_payout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/blackjack_player_payout"
-            android:textSize="36sp">
+            android:textSize="16sp">
 
         </TextView>
     </LinearLayout>
@@ -148,21 +130,50 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_marginTop="16dp"
         android:orientation="horizontal"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tempReturn"
+        app:layout_constraintTop_toBottomOf="@+id/game_money"
         tools:listitem="@layout/blackjack_card_view" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/playerHandRecyclerView"
+        android:id="@+id/playerHandRecyclerViewTop"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="128dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="4dp"
+        android:orientation="horizontal"
+        android:visibility="invisible"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@+id/playerHandRecyclerViewMiddle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:listitem="@layout/blackjack_card_view" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/playerHandRecyclerViewMiddle"
+        android:layout_width="wrap_content"
+        android:layout_height="128dp"
+        android:layout_centerHorizontal="false"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="4dp"
+        android:orientation="horizontal"
+        android:visibility="invisible"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@+id/playerHandRecyclerViewBottom"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:listitem="@layout/blackjack_card_view" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/playerHandRecyclerViewBottom"
+        android:layout_width="wrap_content"
+        android:layout_height="128dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="4dp"
         android:orientation="horizontal"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toTopOf="@+id/controls_layout"
