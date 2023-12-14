@@ -9,7 +9,7 @@
         android:id="@+id/instructions_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:text="Instructions"
         android:textSize="32sp"
         android:textStyle="bold"
@@ -58,10 +58,20 @@
         app:layout_constraintTop_toBottomOf="@+id/step_three_text" />
 
     <TextView
+        android:id="@+id/note_text"
+        android:layout_width="224dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="8dp"
+        android:text="Note: Bet more than $0 in order for the game to start."
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/step_four_text" />
+
+    <TextView
         android:id="@+id/value_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="45dp"
         android:text="Card Values"
         android:textSize="32sp"
         android:textStyle="bold"
@@ -73,7 +83,7 @@
         android:id="@+id/plus_one_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:text="2, 3, 4, 5, 6 -> +1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -83,9 +93,10 @@
         android:id="@+id/zero_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:text="7, 8, 9 -> 0"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/plus_one_text" />
 
@@ -93,7 +104,7 @@
         android:id="@+id/minus_one_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:text="10, Jack, Queen, King, Ace -> -1"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -140,7 +151,7 @@
         android:layout_width="224dp"
         android:layout_height="120dp"
         android:layout_marginTop="8dp"
-        android:text="When the count is low, bet as little as possible. When the count is high increase your bets and remember that 10s and Aces are more likely to be dealt to you and the dealer"
+        android:text="When the count is low, bet as little as possible. When the count is high increase your bets and remember that 10s and Aces are more likely to be dealt to you and the dealer."
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
